@@ -2,7 +2,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Central Control Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');
@@ -55,7 +55,8 @@
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .top-controls { position: fixed; top: 20px; right: 35px; display: flex; gap: 15px; z-index: 100;}
+        /* Modified Floating Controls (Moved to bottom right) */
+        .floating-controls { position: fixed; bottom: 30px; right: 35px; display: flex; gap: 15px; z-index: 100;}
         .theme-btn, .color-picker-wrapper {
             width: 42px; height: 42px; border-radius: 12px; background: var(--card-bg);
             border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center;
@@ -132,12 +133,13 @@
         .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--text); }
         .nav-link.active { background: var(--primary); color: white; box-shadow: 0 4px 15px var(--primary-glow); border-color: var(--primary);}
 
-        .edit-mode-btn { margin-top: auto; background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
+        /* Updated Export and Edit Mode Buttons Styles */
+        .export-btn { margin-top: auto; background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
+        .export-btn:hover { background: var(--card-bg); color: var(--text); }
+
+        .edit-mode-btn { margin-top: 8px; background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
         .edit-mode-btn:hover { background: var(--card-bg); color: var(--text); }
         .edit-mode-btn.active-edit { background: var(--primary); color: #ffffff; border-color: var(--primary); }
-        
-        .export-btn { margin-top: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; justify-content: center; font-weight: 600; }
-        .export-btn:hover { background: #10b981; color: white; border-color: #10b981; }
 
         .developer-credit {
             text-align: center;
@@ -219,7 +221,7 @@
         .btn-save { background: var(--primary); color: white; }
         .btn-save:hover { filter: brightness(1.15); transform: translateY(-2px); }
 
-        /* Responsive Styles for Small Monitors, Tablets, and Mobile */
+        /* Responsive Styles */
         @media (max-width: 768px) {
             #dashboardView {
                 flex-direction: column;
@@ -236,9 +238,10 @@
                 width: 100%;
                 padding: 15px;
             }
-            .top-controls {
-                top: 15px;
-                right: 15px;
+            .floating-controls {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
             }
             .home-greeting {
                 font-size: 24px;
@@ -257,7 +260,7 @@
 </head>
 <body>
 
-    <div class="top-controls">
+    <div class="floating-controls">
         <div class="color-picker-wrapper"><input type="color" id="themeColorPicker" value="#3b82f6"></div>
         <button class="theme-btn" id="themeToggleBtn">☀️</button>
     </div>
@@ -274,434 +277,33 @@
             </div>
         </div>
         <div class="home-menu-grid" id="homeMenuGrid">
-                <div class="home-menu-card" onclick="openDashboard('random')">
-                    <div class="home-menu-icon"><img src="https://img.icons8.com/?size=100&amp;id=14U0lf6HwrIV&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div>
-                    Random Files
-                </div>
-            
-                <div class="home-menu-card" onclick="openDashboard('ai')">
-                    <div class="home-menu-icon"><img src="https://img.icons8.com/?size=100&amp;id=CAAxfIniEgmO&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div>
-                    AI Assistants
-                </div>
-            
-                <div class="home-menu-card" onclick="openDashboard('sec_1790326227893')">
-                    <div class="home-menu-icon"><img src="https://img.icons8.com/?size=100&amp;id=XJ2wmYGmoVoN&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div>
-                    NSU Portal
-                </div>
-            
-                <div class="home-menu-card" onclick="openDashboard('sec_1790326379144')">
-                    <div class="home-menu-icon"><img src="https://img.icons8.com/?size=100&amp;id=12088&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div>
-                    EEE &amp; Technical Tools
-                </div>
-            
-                <div class="home-menu-card" onclick="openDashboard('sec_1790326452290')">
-                    <div class="home-menu-icon"><img src="https://img.icons8.com/?size=100&amp;id=13216&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div>
-                    Mathematical Tools
-                </div>
-            
-                <div class="home-menu-card" onclick="openDashboard('sec_1790330202424')">
-                    <div class="home-menu-icon"><img src="https://img.icons8.com/?size=100&amp;id=uzQgJpoW1gqx&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div>
-                    Relax Time
-                </div>
-            </div>
+                <!-- Home menus will be injected here -->
+        </div>
     </div>
 
     <div id="dashboardView" style="display: flex;">
         <div class="sidebar" id="sidebar">
             <button class="home-btn" onclick="openHome()">🏠 Home Menu</button>
             <div id="dynamicSidebar">
-                <div class="nav-link active" id="nav-random" onclick="switchTab('random')">
-                    <div class="nav-icon"><img src="https://img.icons8.com/?size=100&amp;id=14U0lf6HwrIV&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> Random Files
-                </div>
-            
-                <div class="nav-link" id="nav-ai" onclick="switchTab('ai')">
-                    <div class="nav-icon"><img src="https://img.icons8.com/?size=100&amp;id=CAAxfIniEgmO&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> AI Assistants
-                </div>
-            
-                <div class="nav-link" id="nav-sec_1790326227893" onclick="switchTab('sec_1790326227893')">
-                    <div class="nav-icon"><img src="https://img.icons8.com/?size=100&amp;id=XJ2wmYGmoVoN&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> NSU Portal
-                </div>
-            
-                <div class="nav-link" id="nav-sec_1790326379144" onclick="switchTab('sec_1790326379144')">
-                    <div class="nav-icon"><img src="https://img.icons8.com/?size=100&amp;id=12088&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> EEE &amp; Technical Tools
-                </div>
-            
-                <div class="nav-link" id="nav-sec_1790326452290" onclick="switchTab('sec_1790326452290')">
-                    <div class="nav-icon"><img src="https://img.icons8.com/?size=100&amp;id=13216&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> Mathematical Tools
-                </div>
-            
-                <div class="nav-link" id="nav-sec_1790330202424" onclick="switchTab('sec_1790330202424')">
-                    <div class="nav-icon"><img src="https://img.icons8.com/?size=100&amp;id=uzQgJpoW1gqx&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> Relax Time
-                </div>
+                <!-- Sidebar links will be injected here -->
             </div>
             
             <button class="nav-link add-menu-btn" onclick="openSectionModal()">➕ Add New Menu</button>
-            <button class="nav-link export-btn" onclick="exportUpdatedFile()">📥 Export / Save Code</button>
+            
+            <!-- Updated Buttons Section -->
+            <button class="nav-link export-btn" onclick="exportUpdatedFile()">
+                <span id="exportIcon">📥</span> Export / Save Code
+            </button>
             <button id="toggleEditBtn" class="nav-link edit-mode-btn">
                 <span id="editIcon">⚙️</span> <span id="editText">Enable Edit Mode</span>
             </button>
+            
             <div class="developer-credit">Developed by Arifin Khan</div>
         </div>
 
-        <div class="main" id="content-container"><div class="section active-section" id="sec-random">
-                    <div class="section-header-box">
-                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;"><img src="https://img.icons8.com/?size=100&amp;id=14U0lf6HwrIV&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> Random Files</h2>
-                        <div class="section-actions">
-                            <button class="btn-small" onclick="openEditSectionModal('random')">✏️ Edit Menu</button>
-                            <button class="btn-small delete" onclick="attemptDeleteSection('random')">🗑️ Delete Menu</button>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        
-                    <div class="card">
-                        <a href="https://mail.google.com" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Gmail</h3></div>
-                            <p>Access your emails quickly.</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.google.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=17949&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Google</h3></div>
-                            <p>General web search</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1790327722332')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1790327722332')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://send-anywhere.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=fe3NTBhh8IKg&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Send Anywhere</h3></div>
-                            <p>Sharing files easily</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1790327796383')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1790327796383')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.youtube.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=9a46bTk3awwI&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>YouTube</h3></div>
-                            <p>Video tutorials, lectures, and general content.</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1790327857249')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1790327857249')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://drive.google.com/drive/my-drive" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=13630&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Google Drive</h3></div>
-                            <p>Storing academic files, course materials, and cloud backup</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1790327920651')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1790327920651')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://translate.google.com/?sl=en&amp;tl=bn&amp;op=translate" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=13647&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Google Translator</h3></div>
-                            <p>Translating technical texts, articles, and documents from English to Bengali</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1790327974041')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1790327974041')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.ilovepdf.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=FWOi3qAlXwXA&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>PDF Edit</h3></div>
-                            <p>Merge, Split, PDF conversion, JPG to PDF conversion, and many more</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1790328074383')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1790328074383')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://script.google.com/macros/s/AKfycbxwV0WzcD0Glg0Y0UlAglwr6oQjxyVfC5iEC4YhAJKsAP4LFuKxVCabepUbtU_BGYDFDA/exec" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=IheDEBZzu1Av&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Previous Notes</h3></div>
-                            <p>A secure area where all course materials are available</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1790328159738')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1790328159738')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://keep.google.com/u/0/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=3BW4y2Kk9nCc&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Google Keep</h3></div>
-                            <p>Taking quick notes, setting reminders, and managing to-do lists</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('random', 'L1790328214672')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('random', 'L1790328214672')">Delete</button>
-                        </div>
-                    </div>
-                
-                        <div class="add-card-btn" onclick="openAddModal('random')">+ Add New Link</div>
-                    </div>
-                </div><div class="section" id="sec-ai">
-                    <div class="section-header-box">
-                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;"><img src="https://img.icons8.com/?size=100&amp;id=CAAxfIniEgmO&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> AI Assistants</h2>
-                        <div class="section-actions">
-                            <button class="btn-small" onclick="openEditSectionModal('ai')">✏️ Edit Menu</button>
-                            <button class="btn-small delete" onclick="attemptDeleteSection('ai')">🗑️ Delete Menu</button>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        
-                    <div class="card">
-                        <a href="https://chat.openai.com" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box">💬</div><h3>ChatGPT</h3></div>
-                            <p>Advanced AI chatbot.</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('ai', 'L2')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('ai', 'L2')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://chat.deepseek.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=THRPlyXrzBJk&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Deepseek</h3></div>
-                            <p>Advanced coding and problem-solving assistance.</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('ai', 'L1790328746115')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('ai', 'L1790328746115')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://claude.ai/new" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=POBc2SrrhhnF&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Claude</h3></div>
-                            <p>Analyzing large PDFs, research papers, and advanced coding</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('ai', 'L1790328860346')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('ai', 'L1790328860346')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://gemini.google.com/app" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=GCyCoqI6E4FP&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Gemini</h3></div>
-                            <p>Google-based AI and all problem solution assistant</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('ai', 'L1790328996696')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('ai', 'L1790328996696')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://notebook.google.com/?utm_source=app_launcher&amp;utm_medium=referral&amp;authuser=0&amp;pli=1" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=B3ueFHOl3rWJ&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Gemini Notebook</h3></div>
-                            <p>Google's AI assistant, integrated with workspace</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('ai', 'L1790329077562')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('ai', 'L1790329077562')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://docs.google.com/document/d/1XYQ77e9SzOIUcQOWlwyHhqh0gTbcjiIxF2Ziab_PM3Y/edit?usp=drive_link" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=B3ueFHOl3rWJ&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Gemini Notebook Prompt</h3></div>
-                            <p>Answer looks like you want</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('ai', 'L1790329158272')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('ai', 'L1790329158272')">Delete</button>
-                        </div>
-                    </div>
-                
-                        <div class="add-card-btn" onclick="openAddModal('ai')">+ Add New Link</div>
-                    </div>
-                </div><div class="section" id="sec-sec_1790326227893">
-                    <div class="section-header-box">
-                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;"><img src="https://img.icons8.com/?size=100&amp;id=XJ2wmYGmoVoN&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> NSU Portal</h2>
-                        <div class="section-actions">
-                            <button class="btn-small" onclick="openEditSectionModal('sec_1790326227893')">✏️ Edit Menu</button>
-                            <button class="btn-small delete" onclick="attemptDeleteSection('sec_1790326227893')">🗑️ Delete Menu</button>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        
-                    <div class="card">
-                        <a href="https://rds3.northsouth.edu/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=12197&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>NSU RDS</h3></div>
-                            <p>Course registration, advising, and grade checking</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326227893', 'L1790329273235')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326227893', 'L1790329273235')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.northsouth.edu/nsu-announcements/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=12381&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>NSU Announcement</h3></div>
-                            <p>Checking official announcements, exam schedules, and holiday notices</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326227893', 'L1790329331107')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326227893', 'L1790329331107')">Delete</button>
-                        </div>
-                    </div>
-                
-                        <div class="add-card-btn" onclick="openAddModal('sec_1790326227893')">+ Add New Link</div>
-                    </div>
-                </div><div class="section" id="sec-sec_1790326379144">
-                    <div class="section-header-box">
-                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;"><img src="https://img.icons8.com/?size=100&amp;id=12088&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> EEE &amp; Technical Tools</h2>
-                        <div class="section-actions">
-                            <button class="btn-small" onclick="openEditSectionModal('sec_1790326379144')">✏️ Edit Menu</button>
-                            <button class="btn-small delete" onclick="attemptDeleteSection('sec_1790326379144')">🗑️ Delete Menu</button>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        
-                    <div class="card">
-                        <a href="https://www.falstad.com/circuit/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=41WlhzsZOUyx&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Falstad Circuit Simulator</h3></div>
-                            <p>Quick browser-based 2D circuit simulation (AC/DC).</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326379144', 'L1790329468599')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326379144', 'L1790329468599')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.tinkercad.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=e3sIEq8XA0p0&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Tinkercad</h3></div>
-                            <p>Arduino programming, 3D design, and sensor circuit simulation</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326379144', 'L1790329531331')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326379144', 'L1790329531331')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.overleaf.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=19939&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Overleaf</h3></div>
-                            <p>LaTeX editor for writing professional lab reports and papers.</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326379144', 'L1790329586433')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326379144', 'L1790329586433')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="http://draw.io" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=13355&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>draw.io</h3></div>
-                            <p>Creating block diagrams, circuit schematics, and flowcharts</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326379144', 'L1790329676002')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326379144', 'L1790329676002')">Delete</button>
-                        </div>
-                    </div>
-                
-                        <div class="add-card-btn" onclick="openAddModal('sec_1790326379144')">+ Add New Link</div>
-                    </div>
-                </div><div class="section" id="sec-sec_1790326452290">
-                    <div class="section-header-box">
-                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;"><img src="https://img.icons8.com/?size=100&amp;id=13216&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> Mathematical Tools</h2>
-                        <div class="section-actions">
-                            <button class="btn-small" onclick="openEditSectionModal('sec_1790326452290')">✏️ Edit Menu</button>
-                            <button class="btn-small delete" onclick="attemptDeleteSection('sec_1790326452290')">🗑️ Delete Menu</button>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        
-                    <div class="card">
-                        <a href="https://www.desmos.com/calculator" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=102554&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Desmos</h3></div>
-                            <p>2D graphing calculator for function analysis.</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326452290', 'L1790329803862')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326452290', 'L1790329803862')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.integral-calculator.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=AiHGoEkyfaUb&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Integration</h3></div>
-                            <p>Solving definite and indefinite integrals step-by-step.</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326452290', 'L1790329895856')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326452290', 'L1790329895856')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.derivative-calculator.net/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=-h1qLiHlUfQy&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Differentiation</h3></div>
-                            <p>Finding derivatives and rates of change step-by-step.</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790326452290', 'L1790330101741')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790326452290', 'L1790330101741')">Delete</button>
-                        </div>
-                    </div>
-                
-                        <div class="add-card-btn" onclick="openAddModal('sec_1790326452290')">+ Add New Link</div>
-                    </div>
-                </div><div class="section" id="sec-sec_1790330202424">
-                    <div class="section-header-box">
-                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;"><img src="https://img.icons8.com/?size=100&amp;id=uzQgJpoW1gqx&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div> Relax Time</h2>
-                        <div class="section-actions">
-                            <button class="btn-small" onclick="openEditSectionModal('sec_1790330202424')">✏️ Edit Menu</button>
-                            <button class="btn-small delete" onclick="attemptDeleteSection('sec_1790330202424')">🗑️ Delete Menu</button>
-                        </div>
-                    </div>
-                    <div class="grid">
-                        
-                    <div class="card">
-                        <a href="https://www.crazygames.com/" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=YObj0fzpW3Re&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Crazy Games</h3></div>
-                            <p>Browser-based games (Use a Google account to save progress).</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790330202424', 'L1790330272103')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790330202424', 'L1790330272103')">Delete</button>
-                        </div>
-                    </div>
-                
-                    <div class="card">
-                        <a href="https://www.typing.com/student/lessons" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box"><img src="https://img.icons8.com/?size=100&amp;id=POtdOe97Ucsl&amp;format=png&amp;color=000000" alt="icon" onerror="this.outerHTML='📁'"></div><h3>Typing</h3></div>
-                            <p>Test your typing speed for fun (use a Google account to save progress).</p>
-                        </a>
-                        <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('sec_1790330202424', 'L1790330350459')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('sec_1790330202424', 'L1790330350459')">Delete</button>
-                        </div>
-                    </div>
-                
-                        <div class="add-card-btn" onclick="openAddModal('sec_1790330202424')">+ Add New Link</div>
-                    </div>
-                </div></div>
+        <div class="main" id="content-container">
+            <!-- Sections will be injected here -->
+        </div>
     </div>
 
     <div class="modal" id="editModal">
