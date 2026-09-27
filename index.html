@@ -1,4 +1,6 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Central Control Hub</title>
@@ -17,7 +19,6 @@
             --danger: #ef4444;
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
-
         body.light-mode {
             --bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2670&auto=format&fit=crop');
             --bg-overlay: rgba(255, 255, 255, 0.5);
@@ -29,7 +30,6 @@
             --primary-glow: rgba(59, 130, 246, 0.25);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
-
         body { 
             font-family: 'Poppins', sans-serif; 
             background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), var(--bg-image) no-repeat center center fixed;
@@ -39,7 +39,6 @@
             overflow-x: hidden;
             transition: all 0.4s ease;
         }
-
         #homeView {
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             min-height: 100vh; width: 100%; padding: 20px; box-sizing: border-box;
@@ -51,11 +50,8 @@
             width: 100%; min-height: 100vh;
             animation: fadeIn 0.4s ease;
         }
-
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Modified Floating Controls (Moved to bottom right) */
         .floating-controls { position: fixed; bottom: 30px; right: 35px; display: flex; gap: 15px; z-index: 100;}
         .theme-btn, .color-picker-wrapper {
             width: 42px; height: 42px; border-radius: 12px; background: var(--card-bg);
@@ -67,7 +63,6 @@
         input[type="color"] { opacity: 0; width: 100%; height: 100%; cursor: pointer; position: absolute; }
         .color-picker-wrapper { position: relative; background: var(--primary); border-color: var(--primary); }
         .color-picker-wrapper::after { content: '🎨'; position: absolute; pointer-events: none; }
-
         .home-hero { text-align: center; margin-bottom: 20px; margin-top: 0; }
         .home-greeting { font-size: 32px; font-weight: 700; margin: 0 0 15px 0; letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .home-widgets { 
@@ -79,7 +74,6 @@
         .home-widget-item { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
         .home-widget-item span { color: var(--text-muted); font-weight: 400;}
         .home-widget-divider { width: 1px; background: var(--card-border); height: 20px; }
-
         .home-menu-grid { 
             display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
             gap: 18px; width: 100%; max-width: 900px; 
@@ -101,7 +95,6 @@
             border-color: var(--primary-glow);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-
         .sidebar { 
             width: 260px; height: 100vh; position: fixed; left: 0; top: 0;
             background: var(--sidebar-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -120,7 +113,6 @@
         .home-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 5px 15px var(--primary-glow);}
         
         #dynamicSidebar { display: flex; flex-direction: column; gap: 4px; }
-
         .nav-link { 
             display: flex; align-items: center; gap: 12px; 
             padding: 10px 14px; color: var(--text-muted); 
@@ -132,15 +124,11 @@
         .nav-icon img { width: 100%; height: 100%; object-fit: contain; }
         .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--text); }
         .nav-link.active { background: var(--primary); color: white; box-shadow: 0 4px 15px var(--primary-glow); border-color: var(--primary);}
-
-        /* Updated Export and Edit Mode Buttons Styles */
         .export-btn { margin-top: auto; background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
         .export-btn:hover { background: var(--card-bg); color: var(--text); }
-
         .edit-mode-btn { margin-top: 8px; background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
         .edit-mode-btn:hover { background: var(--card-bg); color: var(--text); }
         .edit-mode-btn.active-edit { background: var(--primary); color: #ffffff; border-color: var(--primary); }
-
         .developer-credit {
             text-align: center;
             font-size: 11px;
@@ -150,10 +138,8 @@
             letter-spacing: 0.5px;
             opacity: 0.8;
         }
-
         .add-menu-btn { display: none; margin-top: 10px; border: 1px dashed var(--primary); color: var(--primary); justify-content: center; background: rgba(59, 130, 246, 0.05);}
         body.editing .add-menu-btn { display: flex; }
-
         .main { margin-left: 260px; padding: 25px 40px 20px 40px; width: calc(100% - 260px); box-sizing: border-box; }
         
         .section { display: none; animation: fadeIn 0.4s ease; }
@@ -200,12 +186,10 @@
         }
         body.editing .add-card-btn { display: flex; }
         .add-card-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
-
         .btn-small { background: rgba(255,255,255,0.1); color: var(--text); border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s; flex: 1;}
         .btn-small.delete { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
         .btn-small:hover { filter: brightness(1.2); background: rgba(255,255,255,0.2); }
         .btn-small.delete:hover { background: var(--danger); color: white; }
-
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; }
         .modal.active { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: var(--sidebar-bg); padding: 30px; border-radius: 18px; width: 90%; max-width: 400px; box-sizing: border-box; border: 1px solid var(--card-border); box-shadow: var(--glass-shadow); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);}
@@ -220,51 +204,22 @@
         .btn-cancel:hover { background: rgba(255,255,255,0.2); }
         .btn-save { background: var(--primary); color: white; }
         .btn-save:hover { filter: brightness(1.15); transform: translateY(-2px); }
-
-        /* Responsive Styles */
         @media (max-width: 768px) {
-            #dashboardView {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                border-right: none;
-                border-bottom: 1px solid var(--card-border);
-            }
-            .main {
-                margin-left: 0;
-                width: 100%;
-                padding: 15px;
-            }
-            .floating-controls {
-                top: auto;
-                bottom: 20px;
-                right: 20px;
-            }
-            .home-greeting {
-                font-size: 24px;
-            }
-            .home-widgets {
-                flex-direction: column;
-                align-items: center;
-                border-radius: 20px;
-                gap: 8px;
-            }
-            .home-widget-divider {
-                display: none;
-            }
+            #dashboardView { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--card-border); }
+            .main { margin-left: 0; width: 100%; padding: 15px; }
+            .floating-controls { top: auto; bottom: 20px; right: 20px; }
+            .home-greeting { font-size: 24px; }
+            .home-widgets { flex-direction: column; align-items: center; border-radius: 20px; gap: 8px; }
+            .home-widget-divider { display: none; }
         }
     </style>
 </head>
 <body>
-
     <div class="floating-controls">
         <div class="color-picker-wrapper"><input type="color" id="themeColorPicker" value="#3b82f6"></div>
         <button class="theme-btn" id="themeToggleBtn">☀️</button>
     </div>
-
     <div id="homeView" style="display: none;">
         <div class="home-hero">
             <h1 class="home-greeting" id="dynamicGreeting">Good Evening, Arifin</h1>
@@ -280,7 +235,6 @@
                 <!-- Home menus will be injected here -->
         </div>
     </div>
-
     <div id="dashboardView" style="display: flex;">
         <div class="sidebar" id="sidebar">
             <button class="home-btn" onclick="openHome()">🏠 Home Menu</button>
@@ -290,7 +244,6 @@
             
             <button class="nav-link add-menu-btn" onclick="openSectionModal()">➕ Add New Menu</button>
             
-            <!-- Updated Buttons Section -->
             <button class="nav-link export-btn" onclick="exportUpdatedFile()">
                 <span id="exportIcon">📥</span> Export / Save Code
             </button>
@@ -300,12 +253,10 @@
             
             <div class="developer-credit">Developed by Arifin Khan</div>
         </div>
-
         <div class="main" id="content-container">
             <!-- Sections will be injected here -->
         </div>
     </div>
-
     <div class="modal" id="editModal">
         <div class="modal-content">
             <h2 id="modalTitle">Add New Link</h2>
@@ -327,7 +278,6 @@
             </form>
         </div>
     </div>
-
     <div class="modal" id="sectionModal">
         <div class="modal-content">
             <h2 id="sectionModalTitle">Add New Menu</h2>
@@ -345,62 +295,86 @@
             </form>
         </div>
     </div>
+    
+    <!-- Firebase Module Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
-    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJsiKGoLLENhRKCSw3OrmJIurYIlNYk-4",
+            authDomain: "my-dashboard-5b8bd.firebaseapp.com",
+            databaseURL: "https://my-dashboard-5b8bd-default-rtdb.firebaseio.com",
+            projectId: "my-dashboard-5b8bd",
+            storageBucket: "my-dashboard-5b8bd.firebasestorage.app",
+            messagingSenderId: "808656856546",
+            appId: "1:808656856546:web:12ff97d7467c8dd9d885bb"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
         const defaultData = [{"id":"random","title":"Random Files","icon":"https://img.icons8.com/?size=100&id=14U0lf6HwrIV&format=png&color=000000","links":[{"id":"L1","title":"Gmail","url":"https://mail.google.com","desc":"Access your emails quickly.","icon":"https://cdn-icons-png.flaticon.com/512/732/732200.png"},{"id":"L1790327722332","title":"Google","url":"https://www.google.com/","desc":"General web search","icon":"https://img.icons8.com/?size=100&id=17949&format=png&color=000000"},{"id":"L1790327796383","title":"Send Anywhere","url":"https://send-anywhere.com/","desc":"Sharing files easily","icon":"https://img.icons8.com/?size=100&id=fe3NTBhh8IKg&format=png&color=000000"},{"id":"L1790327857249","title":"YouTube","url":"https://www.youtube.com/","desc":"Video tutorials, lectures, and general content.","icon":"https://img.icons8.com/?size=100&id=9a46bTk3awwI&format=png&color=000000"},{"id":"L1790327920651","title":"Google Drive","url":"https://drive.google.com/drive/my-drive","desc":"Storing academic files, course materials, and cloud backup","icon":"https://img.icons8.com/?size=100&id=13630&format=png&color=000000"},{"id":"L1790327974041","title":"Google Translator","url":"https://translate.google.com/?sl=en&tl=bn&op=translate","desc":"Translating technical texts, articles, and documents from English to Bengali","icon":"https://img.icons8.com/?size=100&id=13647&format=png&color=000000"},{"id":"L1790328074383","title":"PDF Edit","url":"https://www.ilovepdf.com/","desc":"Merge, Split, PDF conversion, JPG to PDF conversion, and many more","icon":"https://img.icons8.com/?size=100&id=FWOi3qAlXwXA&format=png&color=000000"},{"id":"L1790328159738","title":"Previous Notes","url":"https://script.google.com/macros/s/AKfycbxwV0WzcD0Glg0Y0UlAglwr6oQjxyVfC5iEC4YhAJKsAP4LFuKxVCabepUbtU_BGYDFDA/exec","desc":"A secure area where all course materials are available","icon":"https://img.icons8.com/?size=100&id=IheDEBZzu1Av&format=png&color=000000"},{"id":"L1790328214672","title":"Google Keep","url":"https://keep.google.com/u/0/","desc":"Taking quick notes, setting reminders, and managing to-do lists","icon":"https://img.icons8.com/?size=100&id=3BW4y2Kk9nCc&format=png&color=000000"}]},{"id":"ai","title":"AI Assistants","icon":"https://img.icons8.com/?size=100&id=CAAxfIniEgmO&format=png&color=000000","links":[{"id":"L2","title":"ChatGPT","url":"https://chat.openai.com","desc":"Advanced AI chatbot.","icon":"💬"},{"id":"L1790328746115","title":"Deepseek","url":"https://chat.deepseek.com/","desc":"Advanced coding and problem-solving assistance.","icon":"https://img.icons8.com/?size=100&id=THRPlyXrzBJk&format=png&color=000000"},{"id":"L1790328860346","title":"Claude","url":"https://claude.ai/new","desc":"Analyzing large PDFs, research papers, and advanced coding","icon":"https://img.icons8.com/?size=100&id=POBc2SrrhhnF&format=png&color=000000"},{"id":"L1790328996696","title":"Gemini","url":"https://gemini.google.com/app","desc":"Google-based AI and all problem solution assistant","icon":"https://img.icons8.com/?size=100&id=GCyCoqI6E4FP&format=png&color=000000"},{"id":"L1790329077562","title":"Gemini Notebook","url":"https://notebook.google.com/?utm_source=app_launcher&utm_medium=referral&authuser=0&pli=1","desc":"Google's AI assistant, integrated with workspace","icon":"https://img.icons8.com/?size=100&id=B3ueFHOl3rWJ&format=png&color=000000"},{"id":"L1790329158272","title":"Gemini Notebook Prompt","url":"https://docs.google.com/document/d/1XYQ77e9SzOIUcQOWlwyHhqh0gTbcjiIxF2Ziab_PM3Y/edit?usp=drive_link","desc":"Answer looks like you want","icon":"https://img.icons8.com/?size=100&id=B3ueFHOl3rWJ&format=png&color=000000"}]},{"id":"sec_1790326227893","title":"NSU Portal","icon":"https://img.icons8.com/?size=100&id=XJ2wmYGmoVoN&format=png&color=000000","links":[{"id":"L1790329273235","title":"NSU RDS","url":"https://rds3.northsouth.edu/","desc":"Course registration, advising, and grade checking","icon":"https://img.icons8.com/?size=100&id=12197&format=png&color=000000"},{"id":"L1790329331107","title":"NSU Announcement","url":"https://www.northsouth.edu/nsu-announcements/","desc":"Checking official announcements, exam schedules, and holiday notices","icon":"https://img.icons8.com/?size=100&id=12381&format=png&color=000000"}]},{"id":"sec_1790326379144","title":"EEE & Technical Tools","icon":"https://img.icons8.com/?size=100&id=12088&format=png&color=000000","links":[{"id":"L1790329468599","title":"Falstad Circuit Simulator","url":"https://www.falstad.com/circuit/","desc":"Quick browser-based 2D circuit simulation (AC/DC).","icon":"https://img.icons8.com/?size=100&id=41WlhzsZOUyx&format=png&color=000000"},{"id":"L1790329531331","title":"Tinkercad","url":"https://www.tinkercad.com/","desc":"Arduino programming, 3D design, and sensor circuit simulation","icon":"https://img.icons8.com/?size=100&id=e3sIEq8XA0p0&format=png&color=000000"},{"id":"L1790329586433","title":"Overleaf","url":"https://www.overleaf.com/","desc":"LaTeX editor for writing professional lab reports and papers.","icon":"https://img.icons8.com/?size=100&id=19939&format=png&color=000000"},{"id":"L1790329676002","title":"draw.io","url":"http://draw.io","desc":"Creating block diagrams, circuit schematics, and flowcharts","icon":"https://img.icons8.com/?size=100&id=13355&format=png&color=000000"}]},{"id":"sec_1790326452290","title":"Mathematical Tools","icon":"https://img.icons8.com/?size=100&id=13216&format=png&color=000000","links":[{"id":"L1790329803862","title":"Desmos","url":"https://www.desmos.com/calculator","desc":"2D graphing calculator for function analysis.","icon":"https://img.icons8.com/?size=100&id=102554&format=png&color=000000"},{"id":"L1790329895856","title":"Integration","url":"https://www.integral-calculator.com/","desc":"Solving definite and indefinite integrals step-by-step.","icon":"https://img.icons8.com/?size=100&id=AiHGoEkyfaUb&format=png&color=000000"},{"id":"L1790330101741","title":"Differentiation","url":"https://www.derivative-calculator.net/","desc":"Finding derivatives and rates of change step-by-step.","icon":"https://img.icons8.com/?size=100&id=-h1qLiHlUfQy&format=png&color=000000"}]},{"id":"sec_1790330202424","title":"Relax Time","icon":"https://img.icons8.com/?size=100&id=uzQgJpoW1gqx&format=png&color=000000","links":[{"id":"L1790330272103","title":"Crazy Games","url":"https://www.crazygames.com/","desc":"Browser-based games (Use a Google account to save progress).","icon":"https://img.icons8.com/?size=100&id=YObj0fzpW3Re&format=png&color=000000"},{"id":"L1790330350459","title":"Typing","url":"https://www.typing.com/student/lessons","desc":"Test your typing speed for fun (use a Google account to save progress).","icon":"https://img.icons8.com/?size=100&id=POtdOe97Ucsl&format=png&color=000000"}]}];
-
+        
         let dbData = [];
         let isEditMode = false;
 
         function initApp() {
-            const savedData = localStorage.getItem('studyDashboardData_v6');
-            dbData = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultData));
-            
             if(localStorage.getItem('theme') === 'light') toggleTheme(true);
             const savedColor = localStorage.getItem('primaryColor');
             if(savedColor) {
                 document.documentElement.style.setProperty('--primary', savedColor);
                 document.getElementById('themeColorPicker').value = savedColor;
             }
-
             updateDateTimeAndGreeting();
             setInterval(updateDateTimeAndGreeting, 1000);
             fetchDhakaWeather();
             
-            renderHome();
-            renderSidebar();
-            renderContent();
-            openHome();
+            // Firebase Real-time Listener (Replaces localStorage)
+            const dbRef = ref(database, 'dashboardData');
+            onValue(dbRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    dbData = data;
+                } else {
+                    dbData = JSON.parse(JSON.stringify(defaultData));
+                    set(ref(database, 'dashboardData'), dbData);
+                }
+                renderHome();
+                renderSidebar();
+                renderContent();
+            });
+
+            window.openHome();
         }
 
         function saveData() {
-            localStorage.setItem('studyDashboardData_v6', JSON.stringify(dbData));
-            renderHome(); renderSidebar(); renderContent();
+            set(ref(database, 'dashboardData'), dbData);
         }
 
-        function renderIcon(val) {
+        window.renderIcon = function(val) {
             if(val.match(/\.(jpeg|jpg|gif|png|svg)$/i) || val.startsWith('http') || val.startsWith('data:image')) {
                 return `<img src="${val}" alt="icon" onerror="this.outerHTML='📁'">`;
             }
             return val;
-        }
+        };
 
-        function openHome() {
+        window.openHome = function() {
             document.getElementById('homeView').style.display = 'flex';
             document.getElementById('dashboardView').style.display = 'none';
-        }
+        };
 
-        function openDashboard(sectionId) {
+        window.openDashboard = function(sectionId) {
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('dashboardView').style.display = 'flex';
-            switchTab(sectionId);
-        }
+            window.switchTab(sectionId);
+        };
 
         function renderHome() {
             const grid = document.getElementById('homeMenuGrid');
             grid.innerHTML = dbData.map(section => `
                 <div class="home-menu-card" onclick="openDashboard('${section.id}')">
-                    <div class="home-menu-icon">${renderIcon(section.icon)}</div>
+                    <div class="home-menu-icon">${window.renderIcon(section.icon)}</div>
                     ${section.title}
                 </div>
             `).join('');
@@ -410,7 +384,7 @@
             const sidebar = document.getElementById('dynamicSidebar');
             sidebar.innerHTML = dbData.map(section => `
                 <div class="nav-link" id="nav-${section.id}" onclick="switchTab('${section.id}')">
-                    <div class="nav-icon">${renderIcon(section.icon)}</div> ${section.title}
+                    <div class="nav-icon">${window.renderIcon(section.icon)}</div> ${section.title}
                 </div>
             `).join('');
         }
@@ -418,7 +392,6 @@
         function renderContent() {
             const container = document.getElementById('content-container');
             container.innerHTML = '';
-
             dbData.forEach((section) => {
                 const secHtml = document.createElement('div');
                 secHtml.className = 'section';
@@ -427,19 +400,18 @@
                 let linksHtml = section.links.map(link => `
                     <div class="card">
                         <a href="${link.url}" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box">${renderIcon(link.icon)}</div><h3>${link.title}</h3></div>
+                            <div class="card-header"><div class="icon-box">${window.renderIcon(link.icon)}</div><h3>${link.title}</h3></div>
                             <p>${link.desc}</p>
                         </a>
                         <div class="edit-controls">
-                            <button class="btn-small" onclick="openEditModal('${section.id}', '${link.id}')">Edit</button>
-                            <button class="btn-small delete" onclick="deleteLink('${section.id}', '${link.id}')">Delete</button>
+                            <button class="btn-small" onclick="openEditModal('${section.id}','${link.id}')">Edit</button>
+                            <button class="btn-small delete" onclick="deleteLink('${section.id}','${link.id}')">Delete</button>
                         </div>
                     </div>
                 `).join('');
-
                 secHtml.innerHTML = `
                     <div class="section-header-box">
-                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;">${renderIcon(section.icon)}</div> ${section.title}</h2>
+                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;">${window.renderIcon(section.icon)}</div> ${section.title}</h2>
                         <div class="section-actions">
                             <button class="btn-small" onclick="openEditSectionModal('${section.id}')">✏️ Edit Menu</button>
                             <button class="btn-small delete" onclick="attemptDeleteSection('${section.id}')">🗑️ Delete Menu</button>
@@ -452,16 +424,22 @@
                 `;
                 container.appendChild(secHtml);
             });
+            
+            const activeNav = document.querySelector('.nav-link.active');
+            if(activeNav) {
+                const activeId = activeNav.id.replace('nav-', '');
+                window.switchTab(activeId);
+            }
         }
 
-        function switchTab(id) {
+        window.switchTab = function(id) {
             document.querySelectorAll('.section').forEach(el => el.classList.remove('active-section'));
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             if(document.getElementById(`sec-${id}`)) {
                 document.getElementById(`sec-${id}`).classList.add('active-section');
                 document.getElementById(`nav-${id}`).classList.add('active');
             }
-        }
+        };
 
         document.getElementById('toggleEditBtn').addEventListener('click', function() {
             isEditMode = !isEditMode;
@@ -471,51 +449,55 @@
             document.getElementById('editText').innerText = isEditMode ? 'Exit Edit Mode' : 'Enable Edit Mode';
         });
 
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); };
 
-        function openAddModal(secId) {
+        window.openAddModal = function(secId) {
             document.getElementById('editId').value = ''; document.getElementById('editSectionId').value = secId;
             document.getElementById('linkForm').reset(); document.getElementById('modalTitle').innerText = 'Add New Link';
             document.getElementById('editModal').classList.add('active');
-        }
-        function openEditModal(secId, linkId) {
+        };
+
+        window.openEditModal = function(secId, linkId) {
             const link = dbData.find(s => s.id === secId).links.find(l => l.id === linkId);
             document.getElementById('editId').value = link.id; document.getElementById('editSectionId').value = secId;
             document.getElementById('linkTitle').value = link.title; document.getElementById('linkUrl').value = link.url;
             document.getElementById('linkDesc').value = link.desc; document.getElementById('linkIcon').value = link.icon;
             document.getElementById('modalTitle').innerText = 'Edit Link'; document.getElementById('editModal').classList.add('active');
-        }
+        };
+
         document.getElementById('linkForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const secId = document.getElementById('editSectionId').value; const linkId = document.getElementById('editId').value;
             const newLink = { id: linkId || 'L' + Date.now(), title: document.getElementById('linkTitle').value, url: document.getElementById('linkUrl').value, desc: document.getElementById('linkDesc').value, icon: document.getElementById('linkIcon').value };
             const sec = dbData.find(s => s.id === secId);
             linkId ? sec.links[sec.links.findIndex(l => l.id === linkId)] = newLink : sec.links.push(newLink);
-            saveData(); closeModal('editModal'); switchTab(secId);
+            saveData(); window.closeModal('editModal');
         });
         
-        function deleteLink(secId, linkId) {
+        window.deleteLink = function(secId, linkId) {
             if(confirm('⚠️ ডিলিট করতে চান?')) { 
                 const sec = dbData.find(s => s.id === secId); 
                 sec.links = sec.links.filter(l => l.id !== linkId); 
-                saveData(); switchTab(secId);
+                saveData(); 
             }
-        }
+        };
 
-        function openSectionModal() { 
+        window.openSectionModal = function() { 
             document.getElementById('sectionForm').reset(); 
             document.getElementById('editSecId').value = '';
             document.getElementById('sectionModalTitle').innerText = 'Add New Menu';
             document.getElementById('sectionModal').classList.add('active'); 
-        }
-        function openEditSectionModal(secId) {
+        };
+
+        window.openEditSectionModal = function(secId) {
             const sec = dbData.find(s => s.id === secId);
             document.getElementById('editSecId').value = sec.id;
             document.getElementById('sectionTitle').value = sec.title;
             document.getElementById('sectionIcon').value = sec.icon;
             document.getElementById('sectionModalTitle').innerText = 'Edit Menu';
             document.getElementById('sectionModal').classList.add('active');
-        }
+        };
+
         document.getElementById('sectionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const secId = document.getElementById('editSecId').value;
@@ -526,10 +508,10 @@
             } else {
                 dbData.push({ id: 'sec_' + Date.now(), title: document.getElementById('sectionTitle').value, icon: document.getElementById('sectionIcon').value, links: [] });
             }
-            saveData(); closeModal('sectionModal'); if(secId) switchTab(secId);
+            saveData(); window.closeModal('sectionModal');
         });
         
-        function attemptDeleteSection(secId) {
+        window.attemptDeleteSection = function(secId) {
             const sec = dbData.find(s => s.id === secId);
             if(sec.links.length > 0) {
                 alert('🛑 আগে এই মেনুর ভেতরের অপশনগুলো ডিলিট করুন।');
@@ -537,27 +519,13 @@
             }
             if(confirm(`⚠️ মেনু "${sec.title}" ডিলিট করতে চান?`)) {
                 dbData = dbData.filter(s => s.id !== secId);
-                saveData(); openHome();
+                saveData(); window.openHome();
             }
-        }
+        };
 
-        function exportUpdatedFile() {
-            let htmlContent = document.documentElement.outerHTML;
-            
-            const currentDbString = JSON.stringify(dbData);
-            htmlContent = htmlContent.replace(/const defaultData = \[[\s\S]*?\];/, `const defaultData = ${currentDbString};`);
-
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'dashboard-updated.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            alert('✅ আপনার ফাইলটি সফলভাবে ডাউনলোড হয়েছে! এখন থেকে এই নতুন ফাইলটি ওপেন করলেই আপনার সব এডিট করা ডাটা দেখতে পাবেন।');
-        }
+        window.exportUpdatedFile = function() {
+            alert('✅ ফায়ারবেস ডেটাবেস যুক্ত থাকায় আপনার ডেটা এখন সরাসরি ক্লাউডে সেভ হচ্ছে! কোড ডাউনলোড করার আর কোনো প্রয়োজন নেই।');
+        };
 
         function updateDateTimeAndGreeting() {
             const now = new Date();
@@ -590,7 +558,9 @@
             document.getElementById('themeToggleBtn').innerText = isLight ? '🌙' : '☀️';
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
         });
+
         function toggleTheme(forceLight) { if(forceLight) { document.body.classList.add('light-mode'); document.getElementById('themeToggleBtn').innerText = '🌙'; } }
+        
         document.getElementById('themeColorPicker').addEventListener('input', (e) => {
             document.documentElement.style.setProperty('--primary', e.target.value);
             localStorage.setItem('primaryColor', e.target.value);
@@ -598,5 +568,5 @@
 
         initApp();
     </script>
-
-</body></html>
+</body>
+</html>
