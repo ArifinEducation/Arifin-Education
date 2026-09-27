@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -205,13 +204,38 @@
         .btn-save { background: var(--primary); color: white; }
         .btn-save:hover { filter: brightness(1.15); transform: translateY(-2px); }
         @media (max-width: 768px) {
-            #dashboardView { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--card-border); }
-            .main { margin-left: 0; width: 100%; padding: 15px; }
-            .floating-controls { top: auto; bottom: 20px; right: 20px; }
-            .home-greeting { font-size: 24px; }
-            .home-widgets { flex-direction: column; align-items: center; border-radius: 20px; gap: 8px; }
-            .home-widget-divider { display: none; }
+            #dashboardView {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--card-border);
+            }
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+            .floating-controls {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+            }
+            .home-greeting {
+                font-size: 24px;
+            }
+            .home-widgets {
+                flex-direction: column;
+                align-items: center;
+                border-radius: 20px;
+                gap: 8px;
+            }
+            .home-widget-divider {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -295,31 +319,14 @@
             </form>
         </div>
     </div>
-    
-    <!-- Firebase Module Script -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJsiKGoLLENhRKCSw3OrmJIurYIlNYk-4",
-            authDomain: "my-dashboard-5b8bd.firebaseapp.com",
-            databaseURL: "https://my-dashboard-5b8bd-default-rtdb.firebaseio.com",
-            projectId: "my-dashboard-5b8bd",
-            storageBucket: "my-dashboard-5b8bd.firebasestorage.app",
-            messagingSenderId: "808656856546",
-            appId: "1:808656856546:web:12ff97d7467c8dd9d885bb"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
+    <script>
         const defaultData = [{"id":"random","title":"Random Files","icon":"https://img.icons8.com/?size=100&id=14U0lf6HwrIV&format=png&color=000000","links":[{"id":"L1","title":"Gmail","url":"https://mail.google.com","desc":"Access your emails quickly.","icon":"https://cdn-icons-png.flaticon.com/512/732/732200.png"},{"id":"L1790327722332","title":"Google","url":"https://www.google.com/","desc":"General web search","icon":"https://img.icons8.com/?size=100&id=17949&format=png&color=000000"},{"id":"L1790327796383","title":"Send Anywhere","url":"https://send-anywhere.com/","desc":"Sharing files easily","icon":"https://img.icons8.com/?size=100&id=fe3NTBhh8IKg&format=png&color=000000"},{"id":"L1790327857249","title":"YouTube","url":"https://www.youtube.com/","desc":"Video tutorials, lectures, and general content.","icon":"https://img.icons8.com/?size=100&id=9a46bTk3awwI&format=png&color=000000"},{"id":"L1790327920651","title":"Google Drive","url":"https://drive.google.com/drive/my-drive","desc":"Storing academic files, course materials, and cloud backup","icon":"https://img.icons8.com/?size=100&id=13630&format=png&color=000000"},{"id":"L1790327974041","title":"Google Translator","url":"https://translate.google.com/?sl=en&tl=bn&op=translate","desc":"Translating technical texts, articles, and documents from English to Bengali","icon":"https://img.icons8.com/?size=100&id=13647&format=png&color=000000"},{"id":"L1790328074383","title":"PDF Edit","url":"https://www.ilovepdf.com/","desc":"Merge, Split, PDF conversion, JPG to PDF conversion, and many more","icon":"https://img.icons8.com/?size=100&id=FWOi3qAlXwXA&format=png&color=000000"},{"id":"L1790328159738","title":"Previous Notes","url":"https://script.google.com/macros/s/AKfycbxwV0WzcD0Glg0Y0UlAglwr6oQjxyVfC5iEC4YhAJKsAP4LFuKxVCabepUbtU_BGYDFDA/exec","desc":"A secure area where all course materials are available","icon":"https://img.icons8.com/?size=100&id=IheDEBZzu1Av&format=png&color=000000"},{"id":"L1790328214672","title":"Google Keep","url":"https://keep.google.com/u/0/","desc":"Taking quick notes, setting reminders, and managing to-do lists","icon":"https://img.icons8.com/?size=100&id=3BW4y2Kk9nCc&format=png&color=000000"}]},{"id":"ai","title":"AI Assistants","icon":"https://img.icons8.com/?size=100&id=CAAxfIniEgmO&format=png&color=000000","links":[{"id":"L2","title":"ChatGPT","url":"https://chat.openai.com","desc":"Advanced AI chatbot.","icon":"💬"},{"id":"L1790328746115","title":"Deepseek","url":"https://chat.deepseek.com/","desc":"Advanced coding and problem-solving assistance.","icon":"https://img.icons8.com/?size=100&id=THRPlyXrzBJk&format=png&color=000000"},{"id":"L1790328860346","title":"Claude","url":"https://claude.ai/new","desc":"Analyzing large PDFs, research papers, and advanced coding","icon":"https://img.icons8.com/?size=100&id=POBc2SrrhhnF&format=png&color=000000"},{"id":"L1790328996696","title":"Gemini","url":"https://gemini.google.com/app","desc":"Google-based AI and all problem solution assistant","icon":"https://img.icons8.com/?size=100&id=GCyCoqI6E4FP&format=png&color=000000"},{"id":"L1790329077562","title":"Gemini Notebook","url":"https://notebook.google.com/?utm_source=app_launcher&utm_medium=referral&authuser=0&pli=1","desc":"Google's AI assistant, integrated with workspace","icon":"https://img.icons8.com/?size=100&id=B3ueFHOl3rWJ&format=png&color=000000"},{"id":"L1790329158272","title":"Gemini Notebook Prompt","url":"https://docs.google.com/document/d/1XYQ77e9SzOIUcQOWlwyHhqh0gTbcjiIxF2Ziab_PM3Y/edit?usp=drive_link","desc":"Answer looks like you want","icon":"https://img.icons8.com/?size=100&id=B3ueFHOl3rWJ&format=png&color=000000"}]},{"id":"sec_1790326227893","title":"NSU Portal","icon":"https://img.icons8.com/?size=100&id=XJ2wmYGmoVoN&format=png&color=000000","links":[{"id":"L1790329273235","title":"NSU RDS","url":"https://rds3.northsouth.edu/","desc":"Course registration, advising, and grade checking","icon":"https://img.icons8.com/?size=100&id=12197&format=png&color=000000"},{"id":"L1790329331107","title":"NSU Announcement","url":"https://www.northsouth.edu/nsu-announcements/","desc":"Checking official announcements, exam schedules, and holiday notices","icon":"https://img.icons8.com/?size=100&id=12381&format=png&color=000000"}]},{"id":"sec_1790326379144","title":"EEE & Technical Tools","icon":"https://img.icons8.com/?size=100&id=12088&format=png&color=000000","links":[{"id":"L1790329468599","title":"Falstad Circuit Simulator","url":"https://www.falstad.com/circuit/","desc":"Quick browser-based 2D circuit simulation (AC/DC).","icon":"https://img.icons8.com/?size=100&id=41WlhzsZOUyx&format=png&color=000000"},{"id":"L1790329531331","title":"Tinkercad","url":"https://www.tinkercad.com/","desc":"Arduino programming, 3D design, and sensor circuit simulation","icon":"https://img.icons8.com/?size=100&id=e3sIEq8XA0p0&format=png&color=000000"},{"id":"L1790329586433","title":"Overleaf","url":"https://www.overleaf.com/","desc":"LaTeX editor for writing professional lab reports and papers.","icon":"https://img.icons8.com/?size=100&id=19939&format=png&color=000000"},{"id":"L1790329676002","title":"draw.io","url":"http://draw.io","desc":"Creating block diagrams, circuit schematics, and flowcharts","icon":"https://img.icons8.com/?size=100&id=13355&format=png&color=000000"}]},{"id":"sec_1790326452290","title":"Mathematical Tools","icon":"https://img.icons8.com/?size=100&id=13216&format=png&color=000000","links":[{"id":"L1790329803862","title":"Desmos","url":"https://www.desmos.com/calculator","desc":"2D graphing calculator for function analysis.","icon":"https://img.icons8.com/?size=100&id=102554&format=png&color=000000"},{"id":"L1790329895856","title":"Integration","url":"https://www.integral-calculator.com/","desc":"Solving definite and indefinite integrals step-by-step.","icon":"https://img.icons8.com/?size=100&id=AiHGoEkyfaUb&format=png&color=000000"},{"id":"L1790330101741","title":"Differentiation","url":"https://www.derivative-calculator.net/","desc":"Finding derivatives and rates of change step-by-step.","icon":"https://img.icons8.com/?size=100&id=-h1qLiHlUfQy&format=png&color=000000"}]},{"id":"sec_1790330202424","title":"Relax Time","icon":"https://img.icons8.com/?size=100&id=uzQgJpoW1gqx&format=png&color=000000","links":[{"id":"L1790330272103","title":"Crazy Games","url":"https://www.crazygames.com/","desc":"Browser-based games (Use a Google account to save progress).","icon":"https://img.icons8.com/?size=100&id=YObj0fzpW3Re&format=png&color=000000"},{"id":"L1790330350459","title":"Typing","url":"https://www.typing.com/student/lessons","desc":"Test your typing speed for fun (use a Google account to save progress).","icon":"https://img.icons8.com/?size=100&id=POtdOe97Ucsl&format=png&color=000000"}]}];
-        
         let dbData = [];
         let isEditMode = false;
-
         function initApp() {
+            const savedData = localStorage.getItem('studyDashboardData_v6');
+            dbData = savedData ? JSON.parse(savedData) : JSON.parse(JSON.stringify(defaultData));
+            
             if(localStorage.getItem('theme') === 'light') toggleTheme(true);
             const savedColor = localStorage.getItem('primaryColor');
             if(savedColor) {
@@ -330,65 +337,47 @@
             setInterval(updateDateTimeAndGreeting, 1000);
             fetchDhakaWeather();
             
-            // Firebase Real-time Listener (Replaces localStorage)
-            const dbRef = ref(database, 'dashboardData');
-            onValue(dbRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    dbData = data;
-                } else {
-                    dbData = JSON.parse(JSON.stringify(defaultData));
-                    set(ref(database, 'dashboardData'), dbData);
-                }
-                renderHome();
-                renderSidebar();
-                renderContent();
-            });
-
-            window.openHome();
+            renderHome();
+            renderSidebar();
+            renderContent();
+            openHome();
         }
-
         function saveData() {
-            set(ref(database, 'dashboardData'), dbData);
+            localStorage.setItem('studyDashboardData_v6', JSON.stringify(dbData));
+            renderHome(); renderSidebar(); renderContent();
         }
-
-        window.renderIcon = function(val) {
+        function renderIcon(val) {
             if(val.match(/\.(jpeg|jpg|gif|png|svg)$/i) || val.startsWith('http') || val.startsWith('data:image')) {
                 return `<img src="${val}" alt="icon" onerror="this.outerHTML='📁'">`;
             }
             return val;
-        };
-
-        window.openHome = function() {
+        }
+        function openHome() {
             document.getElementById('homeView').style.display = 'flex';
             document.getElementById('dashboardView').style.display = 'none';
-        };
-
-        window.openDashboard = function(sectionId) {
+        }
+        function openDashboard(sectionId) {
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('dashboardView').style.display = 'flex';
-            window.switchTab(sectionId);
-        };
-
+            switchTab(sectionId);
+        }
         function renderHome() {
             const grid = document.getElementById('homeMenuGrid');
             grid.innerHTML = dbData.map(section => `
                 <div class="home-menu-card" onclick="openDashboard('${section.id}')">
-                    <div class="home-menu-icon">${window.renderIcon(section.icon)}</div>
+                    <div class="home-menu-icon">${renderIcon(section.icon)}</div>
                     ${section.title}
                 </div>
             `).join('');
         }
-
         function renderSidebar() {
             const sidebar = document.getElementById('dynamicSidebar');
             sidebar.innerHTML = dbData.map(section => `
                 <div class="nav-link" id="nav-${section.id}" onclick="switchTab('${section.id}')">
-                    <div class="nav-icon">${window.renderIcon(section.icon)}</div> ${section.title}
+                    <div class="nav-icon">${renderIcon(section.icon)}</div> ${section.title}
                 </div>
             `).join('');
         }
-
         function renderContent() {
             const container = document.getElementById('content-container');
             container.innerHTML = '';
@@ -400,7 +389,7 @@
                 let linksHtml = section.links.map(link => `
                     <div class="card">
                         <a href="${link.url}" target="_blank" class="card-link" style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                            <div class="card-header"><div class="icon-box">${window.renderIcon(link.icon)}</div><h3>${link.title}</h3></div>
+                            <div class="card-header"><div class="icon-box">${renderIcon(link.icon)}</div><h3>${link.title}</h3></div>
                             <p>${link.desc}</p>
                         </a>
                         <div class="edit-controls">
@@ -411,7 +400,7 @@
                 `).join('');
                 secHtml.innerHTML = `
                     <div class="section-header-box">
-                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;">${window.renderIcon(section.icon)}</div> ${section.title}</h2>
+                        <h2 class="section-title"><div class="nav-icon" style="width:36px; height:36px; font-size:28px;">${renderIcon(section.icon)}</div> ${section.title}</h2>
                         <div class="section-actions">
                             <button class="btn-small" onclick="openEditSectionModal('${section.id}')">✏️ Edit Menu</button>
                             <button class="btn-small delete" onclick="attemptDeleteSection('${section.id}')">🗑️ Delete Menu</button>
@@ -424,23 +413,17 @@
                 `;
                 container.appendChild(secHtml);
             });
-            
-            const activeNav = document.querySelector('.nav-link.active');
-            if(activeNav) {
-                const activeId = activeNav.id.replace('nav-', '');
-                window.switchTab(activeId);
-            }
         }
-
-        window.switchTab = function(id) {
+        function switchTab(id) {
             document.querySelectorAll('.section').forEach(el => el.classList.remove('active-section'));
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-            if(document.getElementById(`sec-${id}`)) {
-                document.getElementById(`sec-${id}`).classList.add('active-section');
-                document.getElementById(`nav-${id}`).classList.add('active');
+            const targetSec = document.getElementById(`sec-${id}`);
+            const targetNav = document.getElementById(`nav-${id}`);
+            if(targetSec && targetNav) {
+                targetSec.classList.add('active-section');
+                targetNav.classList.add('active');
             }
-        };
-
+        }
         document.getElementById('toggleEditBtn').addEventListener('click', function() {
             isEditMode = !isEditMode;
             document.body.classList.toggle('editing');
@@ -448,56 +431,58 @@
             document.getElementById('editIcon').innerText = isEditMode ? '💾' : '⚙️';
             document.getElementById('editText').innerText = isEditMode ? 'Exit Edit Mode' : 'Enable Edit Mode';
         });
-
-        window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); };
-
-        window.openAddModal = function(secId) {
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function openAddModal(secId) {
             document.getElementById('editId').value = ''; document.getElementById('editSectionId').value = secId;
             document.getElementById('linkForm').reset(); document.getElementById('modalTitle').innerText = 'Add New Link';
             document.getElementById('editModal').classList.add('active');
-        };
-
-        window.openEditModal = function(secId, linkId) {
+        }
+        function openEditModal(secId, linkId) {
             const link = dbData.find(s => s.id === secId).links.find(l => l.id === linkId);
             document.getElementById('editId').value = link.id; document.getElementById('editSectionId').value = secId;
             document.getElementById('linkTitle').value = link.title; document.getElementById('linkUrl').value = link.url;
             document.getElementById('linkDesc').value = link.desc; document.getElementById('linkIcon').value = link.icon;
             document.getElementById('modalTitle').innerText = 'Edit Link'; document.getElementById('editModal').classList.add('active');
-        };
-
+        }
         document.getElementById('linkForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const secId = document.getElementById('editSectionId').value; const linkId = document.getElementById('editId').value;
-            const newLink = { id: linkId || 'L' + Date.now(), title: document.getElementById('linkTitle').value, url: document.getElementById('linkUrl').value, desc: document.getElementById('linkDesc').value, icon: document.getElementById('linkIcon').value };
+            const secId = document.getElementById('editSectionId').value; 
+            const linkId = document.getElementById('editId').value;
+            const newLink = { 
+                id: linkId || 'L' + Date.now(), 
+                title: document.getElementById('linkTitle').value, 
+                url: document.getElementById('linkUrl').value, 
+                desc: document.getElementById('linkDesc').value, 
+                icon: document.getElementById('linkIcon').value 
+            };
             const sec = dbData.find(s => s.id === secId);
             linkId ? sec.links[sec.links.findIndex(l => l.id === linkId)] = newLink : sec.links.push(newLink);
-            saveData(); window.closeModal('editModal');
+            saveData(); 
+            closeModal('editModal'); 
+            openDashboard(secId); // Fix: Ensure dashboard view and correct section are active after saving
         });
         
-        window.deleteLink = function(secId, linkId) {
+        function deleteLink(secId, linkId) {
             if(confirm('⚠️ ডিলিট করতে চান?')) { 
                 const sec = dbData.find(s => s.id === secId); 
                 sec.links = sec.links.filter(l => l.id !== linkId); 
-                saveData(); 
+                saveData(); openDashboard(secId);
             }
-        };
-
-        window.openSectionModal = function() { 
+        }
+        function openSectionModal() { 
             document.getElementById('sectionForm').reset(); 
             document.getElementById('editSecId').value = '';
             document.getElementById('sectionModalTitle').innerText = 'Add New Menu';
             document.getElementById('sectionModal').classList.add('active'); 
-        };
-
-        window.openEditSectionModal = function(secId) {
+        }
+        function openEditSectionModal(secId) {
             const sec = dbData.find(s => s.id === secId);
             document.getElementById('editSecId').value = sec.id;
             document.getElementById('sectionTitle').value = sec.title;
             document.getElementById('sectionIcon').value = sec.icon;
             document.getElementById('sectionModalTitle').innerText = 'Edit Menu';
             document.getElementById('sectionModal').classList.add('active');
-        };
-
+        }
         document.getElementById('sectionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const secId = document.getElementById('editSecId').value;
@@ -505,13 +490,19 @@
                 const sec = dbData.find(s => s.id === secId);
                 sec.title = document.getElementById('sectionTitle').value;
                 sec.icon = document.getElementById('sectionIcon').value;
+                saveData(); 
+                closeModal('sectionModal'); 
+                openDashboard(secId);
             } else {
-                dbData.push({ id: 'sec_' + Date.now(), title: document.getElementById('sectionTitle').value, icon: document.getElementById('sectionIcon').value, links: [] });
+                const newSecId = 'sec_' + Date.now();
+                dbData.push({ id: newSecId, title: document.getElementById('sectionTitle').value, icon: document.getElementById('sectionIcon').value, links: [] });
+                saveData(); 
+                closeModal('sectionModal'); 
+                openDashboard(newSecId);
             }
-            saveData(); window.closeModal('sectionModal');
         });
         
-        window.attemptDeleteSection = function(secId) {
+        function attemptDeleteSection(secId) {
             const sec = dbData.find(s => s.id === secId);
             if(sec.links.length > 0) {
                 alert('🛑 আগে এই মেনুর ভেতরের অপশনগুলো ডিলিট করুন।');
@@ -519,14 +510,24 @@
             }
             if(confirm(`⚠️ মেনু "${sec.title}" ডিলিট করতে চান?`)) {
                 dbData = dbData.filter(s => s.id !== secId);
-                saveData(); window.openHome();
+                saveData(); openHome();
             }
-        };
-
-        window.exportUpdatedFile = function() {
-            alert('✅ ফায়ারবেস ডেটাবেস যুক্ত থাকায় আপনার ডেটা এখন সরাসরি ক্লাউডে সেভ হচ্ছে! কোড ডাউনলোড করার আর কোনো প্রয়োজন নেই।');
-        };
-
+        }
+        function exportUpdatedFile() {
+            let htmlContent = document.documentElement.outerHTML;
+            const currentDbString = JSON.stringify(dbData);
+            htmlContent = htmlContent.replace(/const defaultData = \[[^\]]*\];/, `const defaultData = ${currentDbString};`);
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dashboard-updated.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('✅ আপনার ফাইলটি সফলভাবে ডাউনলোড হয়েছে! এখন থেকে এই নতুন ফাইলটি ওপেন করলেই আপনার সব এডিট করা ডাটা দেখতে পাবেন।');
+        }
         function updateDateTimeAndGreeting() {
             const now = new Date();
             const hr = now.getHours();
@@ -538,7 +539,6 @@
             document.getElementById('homeTime').innerText = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute:'2-digit' });
             document.getElementById('homeDate').innerText = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
         }
-
         async function fetchDhakaWeather() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.8103&longitude=90.4125&current_weather=true');
@@ -552,20 +552,16 @@
                 document.getElementById('homeWeather').innerText = `${temp}°C, ${condition}`;
             } catch(e) { document.getElementById('homeWeather').innerText = `Offline`; }
         }
-
         document.getElementById('themeToggleBtn').addEventListener('click', () => {
             const isLight = document.body.classList.toggle('light-mode');
             document.getElementById('themeToggleBtn').innerText = isLight ? '🌙' : '☀️';
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
         });
-
         function toggleTheme(forceLight) { if(forceLight) { document.body.classList.add('light-mode'); document.getElementById('themeToggleBtn').innerText = '🌙'; } }
-        
         document.getElementById('themeColorPicker').addEventListener('input', (e) => {
             document.documentElement.style.setProperty('--primary', e.target.value);
             localStorage.setItem('primaryColor', e.target.value);
         });
-
         initApp();
     </script>
 </body>
