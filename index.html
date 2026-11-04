@@ -93,26 +93,78 @@
         }
         .home-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 5px 15px var(--primary-glow);}
         
-        #dynamicSidebar { display: flex; flex-direction: column; gap: 4px; }
-        .nav-link { 
-            display: flex; align-items: center; gap: 12px; 
-            padding: 10px 14px; color: var(--text-muted); 
-            text-decoration: none; border-radius: 12px; 
-            font-size: 14px; font-weight: 500; cursor: pointer;
-            transition: all 0.3s ease; border: 1px solid transparent;
+        #dynamicSidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            width: 100%;
         }
-        .nav-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        /* Sidebar category buttons: restore the original clean glass-style menu. */
+        .nav-link {
+            appearance: none;
+            -webkit-appearance: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            min-width: 0;
+            min-height: 42px;
+            gap: 12px;
+            padding: 10px 14px;
+            box-sizing: border-box;
+            background: rgba(128, 128, 128, 0.08);
+            color: var(--text-muted);
+            font-family: 'Poppins', sans-serif;
+            text-align: left;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+            cursor: pointer;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            border: 1px solid var(--card-border);
+        }
+        .nav-icon {
+            flex: 0 0 20px;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            overflow: hidden;
+        }
         .nav-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--text); }
-        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 4px 15px var(--primary-glow); border-color: var(--primary);}
-        .edit-mode-btn { margin-top: 8px; background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.10);
+            color: var(--text);
+            border-color: rgba(255,255,255,0.18);
+            transform: translateX(2px);
+        }
+        .nav-link.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            border-color: var(--primary);
+        }
+        .edit-mode-btn {
+            flex: 0 0 auto;
+            justify-content: center;
+            margin-top: auto;
+            padding: 11px 14px;
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+        }
         .edit-mode-btn:hover { background: var(--card-bg); color: var(--text); }
         .edit-mode-btn.active-edit { background: var(--primary); color: #ffffff; border-color: var(--primary); }
         .developer-credit {
             text-align: center;
             font-size: 11px;
             color: var(--text-muted);
-            margin-top: 10px;
+            margin-top: 9px;
+            margin-bottom: 2px;
             font-weight: 500;
             letter-spacing: 0.5px;
             opacity: 0.8;
@@ -142,7 +194,7 @@
         
         .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
         .icon-box { 
-            width: 42px; height: 42px; background: rgba(255,255,255,0.05); border-radius: 10px; 
+            flex: 0 0 42px; width: 42px; height: 42px; background: rgba(255,255,255,0.05); border-radius: 10px; 
             display: flex; align-items: center; justify-content: center; font-size: 22px; 
             border: 1px solid var(--card-border);
             transition: transform 0.4s ease;
@@ -263,8 +315,13 @@
     <div id="statusMessage" class="status-message" role="status" aria-live="polite"></div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+        // Firebase is loaded dynamically so a temporary CDN/network failure
+        // cannot prevent the dashboard UI from rendering.
+        let database = null;
+        let firebaseReady = false;
+        let firebaseRef = null;
+        let firebaseSet = null;
+        let firebaseOnValue = null;
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJsiKGoLLENhRKCSw3OrmJIurYIlNYk-4",
@@ -276,11 +333,9 @@
             appId: "1:808656856546:web:12ff97d7467c8dd9d885bb"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
         const defaultData = [{"id":"random","title":"Random Files","icon":"https://img.icons8.com/?size=100&id=14U0lf6HwrIV&format=png&color=000000","links":[{"id":"L1","title":"Gmail","url":"https://mail.google.com","desc":"Access your emails quickly.","icon":"https://cdn-icons-png.flaticon.com/512/732/732200.png"},{"id":"L1790327722332","title":"Google","url":"https://www.google.com/","desc":"General web search","icon":"https://img.icons8.com/?size=100&id=17949&format=png&color=000000"},{"id":"L1790327796383","title":"Send Anywhere","url":"https://send-anywhere.com/","desc":"Sharing files easily","icon":"https://img.icons8.com/?size=100&id=fe3NTBhh8IKg&format=png&color=000000"},{"id":"L1790327857249","title":"YouTube","url":"https://www.youtube.com/","desc":"Video tutorials, lectures, and general content.","icon":"https://img.icons8.com/?size=100&id=9a46bTk3awwI&format=png&color=000000"},{"id":"L1790327920651","title":"Google Drive","url":"https://drive.google.com/drive/my-drive","desc":"Storing academic files, course materials, and cloud backup","icon":"https://img.icons8.com/?size=100&id=13630&format=png&color=000000"},{"id":"L1790327974041","title":"Google Translator","url":"https://translate.google.com/?sl=en&tl=bn&op=translate","desc":"Translating technical texts, articles, and documents from English to Bengali","icon":"https://img.icons8.com/?size=100&id=13647&format=png&color=000000"},{"id":"L1790328074383","title":"PDF Edit","url":"https://www.ilovepdf.com/","desc":"Merge, Split, PDF conversion, JPG to PDF conversion, and many more","icon":"https://img.icons8.com/?size=100&id=FWOi3qAlXwXA&format=png&color=000000"},{"id":"L1790328159738","title":"Previous Notes","url":"https://script.google.com/macros/s/AKfycbxwV0WzcD0Glg0Y0UlAglwr6oQjxyVfC5iEC4YhAJKsAP4LFuKxVCabepUbtU_BGYDFDA/exec","desc":"A secure area where all course materials are available","icon":"https://img.icons8.com/?size=100&id=IheDEBZzu1Av&format=png&color=000000"},{"id":"L1790328214672","title":"Google Keep","url":"https://keep.google.com/u/0/","desc":"Taking quick notes, setting reminders, and managing to-do lists","icon":"https://img.icons8.com/?size=100&id=3BW4y2Kk9nCc&format=png&color=000000"}]},{"id":"ai","title":"AI Assistants","icon":"https://img.icons8.com/?size=100&id=CAAxfIniEgmO&format=png&color=000000","links":[{"id":"L2","title":"ChatGPT","url":"https://chat.openai.com","desc":"Advanced AI chatbot.","icon":"💬"},{"id":"L1790328746115","title":"Deepseek","url":"https://chat.deepseek.com/","desc":"Advanced coding and problem-solving assistance.","icon":"https://img.icons8.com/?size=100&id=THRPlyXrzBJk&format=png&color=000000"},{"id":"L1790328860346","title":"Claude","url":"https://claude.ai/new","desc":"Analyzing large PDFs, research papers, and advanced coding","icon":"https://img.icons8.com/?size=100&id=POBc2SrrhhnF&format=png&color=000000"},{"id":"L1790328996696","title":"Gemini","url":"https://gemini.google.com/app","desc":"Google-based AI and all problem solution assistant","icon":"https://img.icons8.com/?size=100&id=GCyCoqI6E4FP&format=png&color=000000"},{"id":"L1790329077562","title":"Gemini Notebook","url":"https://notebook.google.com/?utm_source=app_launcher&utm_medium=referral&authuser=0&pli=1","desc":"Google's AI assistant, integrated with workspace","icon":"https://img.icons8.com/?size=100&id=B3ueFHOl3rWJ&format=png&color=000000"},{"id":"L1790329158272","title":"Gemini Notebook Prompt","url":"https://docs.google.com/document/d/1XYQ77e9SzOIUcQOWlwyHhqh0gTbcjiIxF2Ziab_PM3Y/edit?usp=drive_link","desc":"Answer looks like you want","icon":"https://img.icons8.com/?size=100&id=B3ueFHOl3rWJ&format=png&color=000000"}]},{"id":"sec_1790326227893","title":"NSU Portal","icon":"https://img.icons8.com/?size=100&id=XJ2wmYGmoVoN&format=png&color=000000","links":[{"id":"L1790329273235","title":"NSU RDS","url":"https://rds3.northsouth.edu/","desc":"Course registration, advising, and grade checking","icon":"https://img.icons8.com/?size=100&id=12197&format=png&color=000000"},{"id":"L1790329331107","title":"NSU Announcement","url":"https://www.northsouth.edu/nsu-announcements/","desc":"Checking official announcements, exam schedules, and holiday notices","icon":"https://img.icons8.com/?size=100&id=12381&format=png&color=000000"}]},{"id":"sec_1790326379144","title":"EEE & Technical Tools","icon":"https://img.icons8.com/?size=100&id=12088&format=png&color=000000","links":[{"id":"L1790329468599","title":"Falstad Circuit Simulator","url":"https://www.falstad.com/circuit/","desc":"Quick browser-based 2D circuit simulation (AC/DC).","icon":"https://img.icons8.com/?size=100&id=41WlhzsZOUyx&format=png&color=000000"},{"id":"L1790329531331","title":"Tinkercad","url":"https://www.tinkercad.com/","desc":"Arduino programming, 3D design, and sensor circuit simulation","icon":"https://img.icons8.com/?size=100&id=e3sIEq8XA0p0&format=png&color=000000"},{"id":"L1790329586433","title":"Overleaf","url":"https://www.overleaf.com/","desc":"LaTeX editor for writing professional lab reports and papers.","icon":"https://img.icons8.com/?size=100&id=19939&format=png&color=000000"},{"id":"L1790329676002","title":"draw.io","url":"http://draw.io","desc":"Creating block diagrams, circuit schematics, and flowcharts","icon":"https://img.icons8.com/?size=100&id=13355&format=png&color=000000"}]},{"id":"sec_1790326452290","title":"Mathematical Tools","icon":"https://img.icons8.com/?size=100&id=13216&format=png&color=000000","links":[{"id":"L1790329803862","title":"Desmos","url":"https://www.desmos.com/calculator","desc":"2D graphing calculator for function analysis.","icon":"https://img.icons8.com/?size=100&id=102554&format=png&color=000000"},{"id":"L1790329895856","title":"Integration","url":"https://www.integral-calculator.com/","desc":"Solving definite and indefinite integrals step-by-step.","icon":"https://img.icons8.com/?size=100&id=AiHGoEkyfaUb&format=png&color=000000"},{"id":"L1790330101741","title":"Differentiation","url":"https://www.derivative-calculator.net/","desc":"Finding derivatives and rates of change step-by-step.","icon":"https://img.icons8.com/?size=100&id=-h1qLiHlUfQy&format=png&color=000000"}]},{"id":"sec_1790330202424","title":"Relax Time","icon":"https://img.icons8.com/?size=100&id=uzQgJpoW1gqx&format=png&color=000000","links":[{"id":"L1790330272103","title":"Crazy Games","url":"https://www.crazygames.com/","desc":"Browser-based games (Use a Google account to save progress).","icon":"https://img.icons8.com/?size=100&id=YObj0fzpW3Re&format=png&color=000000"},{"id":"L1790330350459","title":"Typing","url":"https://www.typing.com/student/lessons","desc":"Test your typing speed for fun (use a Google account to save progress).","icon":"https://img.icons8.com/?size=100&id=POtdOe97Ucsl&format=png&color=000000"}]}];
 
-        let dbData = [];
+        let dbData = JSON.parse(JSON.stringify(defaultData));
         let isEditMode = false;
         let activeSectionId = null;
         let statusTimer;
@@ -302,7 +357,12 @@
             if (typeof value !== 'string') return false;
             try {
                 const url = new URL(value);
-                return url.protocol === 'https:' && /\.(jpeg|jpg|gif|png|svg|webp|avif)$/i.test(url.pathname);
+                if (url.protocol !== 'https:') return false;
+                // Icons8 image URLs commonly use query parameters and have no file extension.
+                const knownImageHost = /(^|\.)((img\.icons8\.com)|(cdn-icons-png\.flaticon\.com)|(images\.unsplash\.com))$/i.test(url.hostname);
+                const hasImageExtension = /\.(jpeg|jpg|gif|png|svg|webp|avif)$/i.test(url.pathname);
+                const hasImageFormat = /(^|&)(format|fm)=(png|jpg|jpeg|webp|svg|gif)(?:&|$)/i.test(url.search.slice(1));
+                return hasImageExtension || knownImageHost || hasImageFormat;
             } catch { return false; }
         }
 
@@ -506,11 +566,20 @@
 
         async function saveData() {
             try {
-                await set(ref(database, 'dashboardData'), dbData);
+                localStorage.setItem('centralControlHubData', JSON.stringify(dbData));
+            } catch (error) {
+                console.warn('Local backup could not be saved:', error);
+            }
+            if (!firebaseReady || !database || !firebaseSet || !firebaseRef) {
+                showStatus('⚠️ Firebase is offline. Changes are saved in this browser only.', 4500);
+                return;
+            }
+            try {
+                await firebaseSet(firebaseRef(database, 'dashboardData'), dbData);
                 showStatus('✅ Changes saved successfully.');
             } catch (error) {
                 console.error('Firebase save failed:', error);
-                showStatus('⚠️ Save failed. Please check your internet connection and Firebase permissions.', 4500);
+                showStatus('⚠️ Cloud save failed. Your browser backup is available.', 4500);
             }
         }
 
@@ -693,34 +762,65 @@
             }
         }
 
-        function initApp() {
+        async function initApp() {
             updateDateTimeAndGreeting();
             setInterval(updateDateTimeAndGreeting, 1000);
             fetchDhakaWeather();
-            const databaseRef = ref(database, 'dashboardData');
-            onValue(databaseRef, snapshot => {
-                const data = snapshot.val();
-                if (data) {
-                    const normalized = normalizeData(data);
-                    if (normalized) dbData = normalized;
-                    else { showStatus('⚠️ Database data format is invalid.', 4500); return; }
-                } else {
-                    dbData = JSON.parse(JSON.stringify(defaultData));
-                    set(databaseRef, dbData).catch(error => {
-                        console.error('Initial Firebase write failed:', error);
-                        showStatus('⚠️ Could not initialize dashboard data. Check Firebase permissions.', 5000);
-                    });
+
+            // Render immediately using saved browser data or the built-in defaults.
+            try {
+                const localData = localStorage.getItem('centralControlHubData');
+                if (localData) {
+                    const normalizedLocal = normalizeData(JSON.parse(localData));
+                    if (normalizedLocal && normalizedLocal.length) dbData = normalizedLocal;
                 }
-                renderAll();
-                if (!$('homeView').style.display || $('homeView').style.display === 'none') {
-                    $('dashboardView').style.display = 'flex';
-                } else {
-                    $('homeView').style.display = 'flex';
-                }
-            }, error => {
-                console.error('Firebase read failed:', error);
-                showStatus('⚠️ Could not connect to Firebase. Check internet and database permissions.', 5500);
-            });
+            } catch (error) {
+                console.warn('Could not read local dashboard backup:', error);
+            }
+            activeSectionId = dbData[0]?.id || null;
+            renderAll();
+
+            // Connect to Firebase after the page is already usable.
+            try {
+                const [appModule, databaseModule] = await Promise.all([
+                    import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'),
+                    import('https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js')
+                ]);
+                const app = appModule.initializeApp(firebaseConfig);
+                database = databaseModule.getDatabase(app);
+                firebaseRef = databaseModule.ref;
+                firebaseSet = databaseModule.set;
+                firebaseOnValue = databaseModule.onValue;
+                firebaseReady = true;
+
+                const databaseRef = firebaseRef(database, 'dashboardData');
+                firebaseOnValue(databaseRef, snapshot => {
+                    const data = snapshot.val();
+                    if (data) {
+                        const normalized = normalizeData(data);
+                        if (normalized) {
+                            dbData = normalized;
+                            try { localStorage.setItem('centralControlHubData', JSON.stringify(dbData)); } catch (_) {}
+                        } else {
+                            showStatus('⚠️ Database data format is invalid.', 4500);
+                            return;
+                        }
+                    } else {
+                        // Preserve browser data when initializing an empty Firebase database.
+                        firebaseSet(databaseRef, dbData).catch(error => {
+                            console.error('Initial Firebase write failed:', error);
+                            showStatus('⚠️ Could not initialize cloud data. Check Firebase permissions.', 5000);
+                        });
+                    }
+                    renderAll();
+                }, error => {
+                    console.error('Firebase read failed:', error);
+                    showStatus('⚠️ Firebase connection failed. The dashboard is running with browser data.', 5500);
+                });
+            } catch (error) {
+                console.error('Firebase modules could not be loaded:', error);
+                showStatus('⚠️ Cloud connection unavailable. Dashboard is running with browser data.', 5500);
+            }
         }
 
         initApp();
