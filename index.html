@@ -44,6 +44,18 @@
         }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes textReveal {
+            from { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 100% 0); }
+            to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+        }
+        @keyframes homeCardReveal {
+            from { opacity: 0; transform: translateY(18px) scale(.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        #homeView.home-enter { animation: fadeInScale .65s ease both; }
+        .home-greeting .greeting-text { display: inline-block; animation: textReveal .75s cubic-bezier(.2,.75,.25,1) both; }
+        #homeView.home-enter .home-widgets { animation: fadeIn .7s ease .12s both; }
+
         .home-hero { text-align: center; margin-bottom: 20px; margin-top: 0; }
         .home-greeting { font-size: 32px; font-weight: 700; margin: 0 0 15px 0; letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .home-widgets { 
@@ -55,17 +67,31 @@
         .home-widget-item { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
         .home-widget-item span { color: var(--text-muted); font-weight: 400;}
         .home-widget-divider { width: 1px; background: var(--card-border); height: 20px; }
-        .home-menu-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-            gap: 18px; width: 100%; max-width: 900px; 
+        .home-menu-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
+            gap: 18px;
+            width: 100%;
+            max-width: 900px;
+            margin-inline: auto;
         }
         .home-menu-card {
+            flex: 1 1 180px;
+            max-width: 205px;
+            min-width: 0;
+            min-height: 125px;
+            box-sizing: border-box;
             background: var(--card-bg); border: 1px solid var(--card-border);
             padding: 20px 15px; border-radius: 16px; text-align: center; cursor: pointer;
             font-size: 15px; font-weight: 600; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             box-shadow: var(--glass-shadow);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; flex-direction: column; align-items: center; gap: 12px;
+            transition: transform 0.35s ease, background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+            opacity: 0;
+            animation: homeCardReveal 0.55s cubic-bezier(.2,.75,.25,1) forwards;
+            animation-delay: calc(var(--card-index, 0) * 75ms + 180ms);
         }
         .home-menu-icon { font-size: 28px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;}
         .home-menu-icon img { width: 100%; height: 100%; object-fit: contain; }
@@ -240,6 +266,8 @@
             .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--card-border); }
             .main { margin-left: 0; width: 100%; padding: 15px; }
             .home-greeting { font-size: 24px; }
+            .home-menu-grid { max-width: 520px; gap: 12px; }
+            .home-menu-card { flex: 1 1 145px; max-width: 190px; min-height: 112px; }
             .home-widgets { flex-direction: column; align-items: center; border-radius: 20px; gap: 8px; }
             .home-widget-divider { display: none; }
         }
@@ -411,10 +439,11 @@
         function renderHome() {
             const grid = $('homeMenuGrid');
             grid.replaceChildren();
-            dbData.forEach(section => {
+            dbData.forEach((section, index) => {
                 const card = document.createElement('button');
                 card.type = 'button';
                 card.className = 'home-menu-card';
+                card.style.setProperty('--card-index', index);
                 card.dataset.action = 'open-section';
                 card.dataset.sectionId = section.id;
                 card.append(createIcon(section.icon, 'home-menu-icon'));
@@ -543,9 +572,43 @@
             renderContent();
         }
 
+        let hasVisitedHome = false;
+
+        function playHomeEntrance(isReturning = false) {
+            const greeting = $('dynamicGreeting');
+            const message = isReturning ? 'Welcome back, Arifin' : getTimeGreeting();
+            greeting.replaceChildren();
+            const text = document.createElement('span');
+            text.className = 'greeting-text';
+            text.textContent = message;
+            greeting.appendChild(text);
+
+            const home = $('homeView');
+            home.classList.remove('home-enter');
+            // Force a style recalculation so the entrance animation can replay.
+            void home.offsetWidth;
+            home.classList.add('home-enter');
+
+            // Restart the staggered card reveal whenever Home Menu is opened.
+            $('homeMenuGrid').querySelectorAll('.home-menu-card').forEach(card => {
+                card.style.animation = 'none';
+                void card.offsetWidth;
+                card.style.animation = '';
+            });
+        }
+
+        function getTimeGreeting() {
+            const hour = new Date().getHours();
+            if (hour >= 5 && hour < 12) return 'Good Morning, Arifin';
+            if (hour >= 12 && hour < 17) return 'Good Afternoon, Arifin';
+            return 'Good Evening, Arifin';
+        }
+
         function openHome() {
             $('homeView').style.display = 'flex';
             $('dashboardView').style.display = 'none';
+            playHomeEntrance(hasVisitedHome);
+            hasVisitedHome = true;
         }
 
         function openDashboard(sectionId) {
@@ -735,10 +798,14 @@
         function updateDateTimeAndGreeting() {
             const now = new Date();
             const hour = now.getHours();
-            let greeting = 'Good Evening';
-            if (hour >= 5 && hour < 12) greeting = 'Good Morning';
-            else if (hour >= 12 && hour < 17) greeting = 'Good Afternoon';
-            $('dynamicGreeting').textContent = `${greeting}, Arifin`;
+            // Keep the time-based greeting current until the user returns from Dashboard.
+            if (!hasVisitedHome || $('homeView').style.display !== 'none') {
+                const greeting = $('dynamicGreeting');
+                const currentText = greeting.textContent || '';
+                if (!currentText.startsWith('Welcome back')) {
+                    greeting.textContent = getTimeGreeting();
+                }
+            }
             $('homeTime').textContent = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' });
             $('homeDate').textContent = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
         }
@@ -779,6 +846,7 @@
             }
             activeSectionId = dbData[0]?.id || null;
             renderAll();
+            playHomeEntrance(false);
 
             // Connect to Firebase after the page is already usable.
             try {
