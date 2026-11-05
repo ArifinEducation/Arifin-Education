@@ -44,17 +44,6 @@
         }
         @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes textReveal {
-            from { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 100% 0); }
-            to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
-        }
-        @keyframes homeCardReveal {
-            from { opacity: 0; transform: translateY(18px) scale(.97); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        #homeView.home-enter { animation: fadeInScale .65s ease both; }
-        .home-greeting .greeting-text { display: inline-block; animation: textReveal .75s cubic-bezier(.2,.75,.25,1) both; }
-        #homeView.home-enter .home-widgets { animation: fadeIn .7s ease .12s both; }
 
         .home-hero { text-align: center; margin-bottom: 20px; margin-top: 0; }
         .home-greeting { font-size: 32px; font-weight: 700; margin: 0 0 15px 0; letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
@@ -87,15 +76,34 @@
             padding: 20px 15px; border-radius: 16px; text-align: center; cursor: pointer;
             font-size: 15px; font-weight: 600; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             box-shadow: var(--glass-shadow);
-            transition: transform 0.35s ease, background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-            opacity: 0;
-            animation: homeCardReveal 0.55s cubic-bezier(.2,.75,.25,1) forwards;
-            animation-delay: calc(var(--card-index, 0) * 75ms + 180ms);
         }
+
         .home-menu-icon { font-size: 28px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;}
         .home-menu-icon img { width: 100%; height: 100%; object-fit: contain; }
         
+
+        
+        .reorder-hint {
+            display: none;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: 4px;
+            letter-spacing: .2px;
+        }
+        body.editing .reorder-hint { display: block; }
+        body.editing .home-menu-card,
+        body.editing .nav-link[data-action="switch-section"],
+        body.editing .card[data-sortable="link"] {
+            cursor: grab;
+        }
+        body.editing .home-menu-card:active,
+        body.editing .nav-link[data-action="switch-section"]:active,
+        body.editing .card[data-sortable="link"]:active { cursor: grabbing; }
+        .dragging-item { opacity: .38 !important; transform: scale(.98); }
+        .drop-target { outline: 2px dashed var(--primary); outline-offset: 3px; }
         .home-menu-card:hover {
             transform: translateY(-10px);
             background: var(--sidebar-bg);
@@ -299,6 +307,7 @@
         <aside class="sidebar" id="sidebar">
             <button class="home-btn" type="button" data-action="home">🏠 Home Menu</button>
             <div id="dynamicSidebar"></div>
+            <div class="reorder-hint" style="padding:4px 8px;">↕ Edit Mode: drag menus or links to rearrange</div>
             <button class="nav-link add-menu-btn" type="button" data-action="add-section">➕ Add New Menu</button>
             <button id="toggleEditBtn" class="nav-link edit-mode-btn" type="button" data-action="toggle-edit">
                 <span id="editIcon">⚙️</span> <span id="editText">Enable Edit Mode</span>
@@ -439,12 +448,20 @@
         function renderHome() {
             const grid = $('homeMenuGrid');
             grid.replaceChildren();
-            dbData.forEach((section, index) => {
+            dbData.forEach(section => {
                 const card = document.createElement('button');
                 card.type = 'button';
                 card.className = 'home-menu-card';
-                card.style.setProperty('--card-index', index);
                 card.dataset.action = 'open-section';
+                card.dataset.sortable = 'section';
+                card.dataset.sectionId = section.id;
+                card.draggable = isEditMode;
+                if (isEditMode) {
+                    const hint = document.createElement('small');
+                    hint.className = 'reorder-hint';
+                    hint.textContent = '↕ Drag to rearrange';
+                    card.appendChild(hint);
+                }
                 card.dataset.sectionId = section.id;
                 card.append(createIcon(section.icon, 'home-menu-icon'));
                 const title = document.createElement('span');
@@ -464,6 +481,8 @@
                 item.id = 'nav-' + section.id;
                 item.dataset.action = 'switch-section';
                 item.dataset.sectionId = section.id;
+                item.dataset.sortable = 'section';
+                item.draggable = isEditMode;
                 item.appendChild(createIcon(section.icon, 'nav-icon'));
                 const label = document.createElement('span');
                 label.textContent = section.title;
@@ -515,8 +534,15 @@
                 section.links.forEach(link => {
                     const card = document.createElement('article');
                     card.className = 'card';
+                    if (section.id === activeSectionId) {
+                        card.dataset.sortable = 'link';
+                        card.dataset.sectionId = section.id;
+                        card.dataset.linkId = link.id;
+                        card.draggable = isEditMode;
+                    }
                     const anchor = document.createElement('a');
                     anchor.className = 'card-link';
+                    anchor.draggable = false;
                     anchor.style.cssText = 'text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;';
                     if (validExternalUrl(link.url)) {
                         anchor.href = link.url;
@@ -574,27 +600,8 @@
 
         let hasVisitedHome = false;
 
-        function playHomeEntrance(isReturning = false) {
-            const greeting = $('dynamicGreeting');
-            const message = isReturning ? 'Welcome back, Arifin' : getTimeGreeting();
-            greeting.replaceChildren();
-            const text = document.createElement('span');
-            text.className = 'greeting-text';
-            text.textContent = message;
-            greeting.appendChild(text);
-
-            const home = $('homeView');
-            home.classList.remove('home-enter');
-            // Force a style recalculation so the entrance animation can replay.
-            void home.offsetWidth;
-            home.classList.add('home-enter');
-
-            // Restart the staggered card reveal whenever Home Menu is opened.
-            $('homeMenuGrid').querySelectorAll('.home-menu-card').forEach(card => {
-                card.style.animation = 'none';
-                void card.offsetWidth;
-                card.style.animation = '';
-            });
+        function setHomeGreeting(isReturning = false) {
+            $('dynamicGreeting').textContent = isReturning ? 'Welcome back, Arifin' : getTimeGreeting();
         }
 
         function getTimeGreeting() {
@@ -607,7 +614,7 @@
         function openHome() {
             $('homeView').style.display = 'flex';
             $('dashboardView').style.display = 'none';
-            playHomeEntrance(hasVisitedHome);
+            setHomeGreeting(hasVisitedHome);
             hasVisitedHome = true;
         }
 
@@ -698,6 +705,90 @@
             openModal('sectionModal');
         }
 
+
+        // Reorder categories and links by dragging while Edit Mode is enabled.
+        let draggedItem = null;
+
+        document.addEventListener('dragstart', event => {
+            if (!isEditMode) {
+                event.preventDefault();
+                return;
+            }
+            const item = event.target.closest('[data-sortable]');
+            if (!item) return;
+            draggedItem = {
+                type: item.dataset.sortable,
+                sectionId: item.dataset.sectionId || null,
+                itemId: item.dataset.linkId || item.dataset.sectionId
+            };
+            item.classList.add('dragging-item');
+            if (event.dataTransfer) {
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', JSON.stringify(draggedItem));
+            }
+        });
+
+        document.addEventListener('dragover', event => {
+            if (!isEditMode || !draggedItem) return;
+            const target = event.target.closest('[data-sortable]');
+            if (!target || target.dataset.sortable !== draggedItem.type) return;
+            if (draggedItem.type === 'link' && target.dataset.sectionId !== draggedItem.sectionId) return;
+            event.preventDefault();
+            document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+            target.classList.add('drop-target');
+            if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+        });
+
+        document.addEventListener('drop', async event => {
+            if (!isEditMode || !draggedItem) return;
+            const target = event.target.closest('[data-sortable]');
+            if (!target || target.dataset.sortable !== draggedItem.type) return;
+            if (draggedItem.type === 'link' && target.dataset.sectionId !== draggedItem.sectionId) return;
+            event.preventDefault();
+
+            const sourceId = draggedItem.itemId;
+            const targetId = draggedItem.type === 'link' ? target.dataset.linkId : target.dataset.sectionId;
+            if (!sourceId || !targetId || sourceId === targetId) return;
+
+            const bounds = target.getBoundingClientRect();
+            const insertAfter = draggedItem.type === 'link'
+                ? event.clientY > bounds.top + bounds.height / 2
+                : event.clientY > bounds.top + bounds.height / 2;
+
+            if (draggedItem.type === 'section') {
+                const from = dbData.findIndex(section => section.id === sourceId);
+                const to = dbData.findIndex(section => section.id === targetId);
+                if (from < 0 || to < 0) return;
+                const [moved] = dbData.splice(from, 1);
+                const targetIndex = dbData.findIndex(section => section.id === targetId);
+                dbData.splice(targetIndex + (insertAfter ? 1 : 0), 0, moved);
+            } else {
+                const section = dbData.find(item => item.id === draggedItem.sectionId);
+                if (!section) return;
+                const from = section.links.findIndex(link => link.id === sourceId);
+                if (from < 0) return;
+                const [moved] = section.links.splice(from, 1);
+                const targetIndex = section.links.findIndex(link => link.id === targetId);
+                if (targetIndex < 0) {
+                    section.links.splice(from, 0, moved);
+                    return;
+                }
+                section.links.splice(targetIndex + (insertAfter ? 1 : 0), 0, moved);
+            }
+
+            document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
+            draggedItem = null;
+            renderAll();
+            await saveData();
+        });
+
+        document.addEventListener('dragend', () => {
+            document.querySelectorAll('.dragging-item, .drop-target').forEach(el => {
+                el.classList.remove('dragging-item', 'drop-target');
+            });
+            draggedItem = null;
+        });
+
         $('linkForm').addEventListener('submit', async event => {
             event.preventDefault();
             const sectionId = $('editSectionId').value;
@@ -754,7 +845,7 @@
                     case 'switch-section': switchTab(sectionId); break;
                     case 'toggle-edit':
                         isEditMode = !isEditMode;
-                        renderContent();
+                        renderAll();
                         break;
                     case 'add-section': openSectionModal(); break;
                     case 'add-link': openAddModal(sectionId); break;
@@ -846,7 +937,7 @@
             }
             activeSectionId = dbData[0]?.id || null;
             renderAll();
-            playHomeEntrance(false);
+            setHomeGreeting(false);
 
             // Connect to Firebase after the page is already usable.
             try {
