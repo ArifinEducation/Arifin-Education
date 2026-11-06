@@ -284,8 +284,63 @@
             .home-widget-divider { display: none; }
         }
 
-        .status-message { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 1100; padding: 10px 16px; border-radius: 10px; background: rgba(15,23,42,.94); color: #fff; font-size: 13px; box-shadow: 0 8px 25px rgba(0,0,0,.25); display: none; max-width: calc(100% - 32px); text-align: center; }
-        .status-message.show { display: block; animation: fadeIn .2s ease; }
+        /* Logo-free startup loader: shown only while the local interface is prepared. */
+        .app-loader {
+            position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center;
+            padding: 24px; box-sizing: border-box; background: rgba(9, 9, 11, .96);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            opacity: 1; visibility: visible; transition: opacity .35s ease, visibility .35s ease;
+        }
+        .app-loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-content { display: flex; flex-direction: column; align-items: center; gap: 13px; text-align: center; }
+        .loader-orbit { width: 66px; height: 66px; position: relative; display: grid; place-items: center; }
+        .loader-orbit::before {
+            content: ''; position: absolute; inset: 3px; border: 2px solid rgba(255,255,255,.10);
+            border-top-color: var(--primary); border-right-color: rgba(59,130,246,.45);
+            border-radius: 50%; animation: loaderSpin 1.15s linear infinite;
+        }
+        .loader-orbit::after {
+            content: ''; position: absolute; width: 9px; height: 9px; top: 0; left: 29px;
+            border-radius: 50%; background: #93c5fd; box-shadow: 0 0 16px var(--primary-glow);
+            transform-origin: 4px 33px; animation: loaderOrbit 1.8s linear infinite;
+        }
+        .loader-core { width: 12px; height: 12px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 22px var(--primary-glow); animation: loaderPulse 1.25s ease-in-out infinite; }
+        .loader-dots { display: flex; align-items: center; gap: 6px; height: 10px; }
+        .loader-dots span { width: 5px; height: 5px; border-radius: 50%; background: #93c5fd; animation: loaderBounce .9s ease-in-out infinite; }
+        .loader-dots span:nth-child(2) { animation-delay: .13s; }
+        .loader-dots span:nth-child(3) { animation-delay: .26s; }
+        .loader-title { margin: 2px 0 0; font-size: 15px; font-weight: 600; letter-spacing: .1px; color: #fff; }
+        .loader-caption { margin: -8px 0 0; color: rgba(255,255,255,.58); font-size: 12px; }
+        @keyframes loaderSpin { to { transform: rotate(360deg); } }
+        @keyframes loaderOrbit { to { transform: rotate(360deg); } }
+        @keyframes loaderPulse { 50% { transform: scale(.72); opacity: .72; } }
+        @keyframes loaderBounce { 0%, 60%, 100% { transform: translateY(0); opacity: .55; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+        /* Small shimmer skeletons are used only while remote icon images load. */
+        .icon-loading { position: relative; overflow: hidden; background: rgba(255,255,255,.07) !important; }
+        .icon-box img, .home-menu-icon img, .nav-icon img { transition: opacity .22s ease; }
+        .icon-loading img { opacity: 0; }
+        .icon-loading::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,.20) 45%, transparent 70%);
+            transform: translateX(-110%); animation: iconShimmer 1.15s ease-in-out infinite;
+        }
+        @keyframes iconShimmer { to { transform: translateX(110%); } }
+
+        .status-message { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 1100; padding: 10px 16px; border-radius: 10px; background: rgba(15,23,42,.94); color: #fff; font-size: 13px; line-height: 1.45; box-shadow: 0 8px 25px rgba(0,0,0,.25); display: none; max-width: calc(100% - 32px); text-align: center; align-items: center; justify-content: center; gap: 9px; }
+        .status-message.show { display: flex; animation: fadeIn .2s ease; }
+        .status-message.is-loading::before {
+            content: ''; flex: 0 0 13px; width: 13px; height: 13px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,.28); border-top-color: #fff;
+            animation: loaderSpin .75s linear infinite;
+        }
+        .button-spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(255,255,255,.35); border-top-color: currentColor; border-radius: 50%; animation: loaderSpin .75s linear infinite; vertical-align: -2px; margin-right: 7px; }
+        .btn:disabled { opacity: .75; cursor: wait; transform: none !important; }
+        #homeWeather.weather-loading::before {
+            content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 7px;
+            border: 1.5px solid rgba(255,255,255,.25); border-top-color: var(--primary);
+            border-radius: 50%; vertical-align: -1px; animation: loaderSpin .8s linear infinite;
+        }
         button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
         .card-link { min-width: 0; }
         .home-menu-card { color: var(--text); }
@@ -293,6 +348,15 @@
     </style>
 </head>
 <body>
+    <div class="app-loader" id="appLoader" role="status" aria-live="polite" aria-label="Preparing your workspace">
+        <div class="loader-content">
+            <div class="loader-orbit" aria-hidden="true"><span class="loader-core"></span></div>
+            <div class="loader-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <p class="loader-title">Preparing your workspace</p>
+            <p class="loader-caption">Getting your saved shortcuts ready...</p>
+        </div>
+    </div>
+
     <div id="homeView">
         <div class="home-hero">
             <h1 class="home-greeting" id="dynamicGreeting">Welcome</h1>
@@ -301,7 +365,7 @@
                 <div class="home-widget-divider"></div>
                 <div class="home-widget-item">⏰ <span id="homeTime">--:--</span></div>
                 <div class="home-widget-divider"></div>
-                <div class="home-widget-item">🌤️ <span id="homeWeather">Loading weather...</span></div>
+                <div class="home-widget-item">🌤️ <span id="homeWeather" class="weather-loading">Checking weather...</span></div>
             </div>
         </div>
         <div class="home-menu-grid" id="homeMenuGrid"></div>
@@ -382,12 +446,45 @@
         let statusTimer;
         const $ = (id) => document.getElementById(id);
 
-        function showStatus(message, duration = 2600) {
+        function showStatus(message, duration = 2600, state = '') {
             const box = $('statusMessage');
             box.textContent = message;
+            box.classList.toggle('is-loading', state === 'loading');
             box.classList.add('show');
             clearTimeout(statusTimer);
-            statusTimer = setTimeout(() => box.classList.remove('show'), duration);
+            if (duration > 0) {
+                statusTimer = setTimeout(() => {
+                    box.classList.remove('show', 'is-loading');
+                }, duration);
+            }
+        }
+
+        function setFormLoading(form, isLoading) {
+            const button = form.querySelector('button[type="submit"]');
+            if (!button) return;
+            const controls = Array.from(form.elements);
+            if (isLoading) {
+                if (form.dataset.saving === 'true') return;
+                form.dataset.saving = 'true';
+                button.dataset.originalLabel = button.textContent.trim();
+                controls.forEach(control => { control.disabled = true; });
+                button.innerHTML = '<span class="button-spinner" aria-hidden="true"></span>Saving...';
+                button.setAttribute('aria-label', 'Saving');
+            } else {
+                delete form.dataset.saving;
+                controls.forEach(control => { control.disabled = false; });
+                button.textContent = button.dataset.originalLabel || 'Save';
+                button.removeAttribute('aria-label');
+            }
+        }
+
+        function hideMainLoader() {
+            const loader = $('appLoader');
+            if (!loader) return;
+            requestAnimationFrame(() => {
+                loader.classList.add('is-hidden');
+                setTimeout(() => loader.remove(), 450);
+            });
         }
 
         function safeText(value, fallback = '') {
@@ -413,11 +510,16 @@
             const iconValue = safeText(value, '📁').trim();
             if (isImageUrl(iconValue)) {
                 const image = document.createElement('img');
-                image.src = iconValue;
+                wrapper.classList.add('icon-loading');
                 image.alt = 'Icon';
                 image.loading = 'lazy';
                 image.referrerPolicy = 'no-referrer';
-                image.addEventListener('error', () => { wrapper.textContent = '📁'; }, { once: true });
+                image.addEventListener('load', () => wrapper.classList.remove('icon-loading'), { once: true });
+                image.addEventListener('error', () => {
+                    wrapper.classList.remove('icon-loading');
+                    wrapper.textContent = '📁';
+                }, { once: true });
+                image.src = iconValue;
                 wrapper.appendChild(image);
             } else {
                 wrapper.textContent = iconValue || '📁';
@@ -638,22 +740,41 @@
             renderContent();
         }
 
-        async function saveData() {
+        async function saveData(options = {}) {
+            const { showProgressToast = true } = options;
             try {
                 localStorage.setItem('centralControlHubData', JSON.stringify(dbData));
             } catch (error) {
                 console.warn('Local backup could not be saved:', error);
             }
             if (!firebaseReady || !database || !firebaseSet || !firebaseRef) {
-                showStatus('⚠️ Firebase is offline. Changes are saved in this browser only.', 4500);
+                showStatus('⚠️ Saved in this browser. Cloud sync is unavailable.', 4500);
                 return;
             }
+            if (showProgressToast) showStatus('Saving changes to cloud...', 0, 'loading');
+            let timeoutId;
             try {
-                await firebaseSet(firebaseRef(database, 'dashboardData'), dbData);
-                showStatus('✅ Changes saved successfully.');
+                const writeResult = firebaseSet(firebaseRef(database, 'dashboardData'), dbData).then(
+                    () => ({ state: 'saved' }),
+                    error => ({ state: 'failed', error })
+                );
+                const timeoutResult = new Promise(resolve => {
+                    timeoutId = setTimeout(() => resolve({ state: 'timeout' }), 10000);
+                });
+                const result = await Promise.race([writeResult, timeoutResult]);
+                clearTimeout(timeoutId);
+                if (result.state === 'timeout') {
+                    showStatus('⚠️ Cloud sync is taking longer. Your browser backup is available.', 5000, 'warning');
+                } else if (result.state === 'failed') {
+                    console.error('Firebase save failed:', result.error);
+                    showStatus('⚠️ Cloud save failed. Your browser backup is available.', 4500, 'error');
+                } else {
+                    showStatus('✅ Changes saved successfully.', 2200, 'success');
+                }
             } catch (error) {
+                clearTimeout(timeoutId);
                 console.error('Firebase save failed:', error);
-                showStatus('⚠️ Cloud save failed. Your browser backup is available.', 4500);
+                showStatus('⚠️ Cloud save failed. Your browser backup is available.', 4500, 'error');
             }
         }
 
@@ -795,6 +916,8 @@
 
         $('linkForm').addEventListener('submit', async event => {
             event.preventDefault();
+            const form = $('linkForm');
+            if (form.dataset.saving === 'true') return;
             const sectionId = $('editSectionId').value;
             const linkId = $('editId').value;
             const section = dbData.find(item => item.id === sectionId);
@@ -815,12 +938,19 @@
                 if (index !== -1) section.links[index] = newLink;
             } else section.links.push(newLink);
             renderAll();
-            closeModal('editModal');
-            await saveData();
+            setFormLoading(form, true);
+            try {
+                await saveData({ showProgressToast: false });
+            } finally {
+                closeModal('editModal');
+                setFormLoading(form, false);
+            }
         });
 
         $('sectionForm').addEventListener('submit', async event => {
             event.preventDefault();
+            const form = $('sectionForm');
+            if (form.dataset.saving === 'true') return;
             const sectionId = $('editSecId').value;
             const title = $('sectionTitle').value.trim();
             const icon = $('sectionIcon').value.trim();
@@ -835,8 +965,13 @@
                 activeSectionId = newSection.id;
             }
             renderAll();
-            closeModal('sectionModal');
-            await saveData();
+            setFormLoading(form, true);
+            try {
+                await saveData({ showProgressToast: false });
+            } finally {
+                closeModal('sectionModal');
+                setFormLoading(form, false);
+            }
         });
 
         document.addEventListener('click', async event => {
@@ -906,8 +1041,10 @@
         }
 
         async function fetchDhakaWeather() {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
             try {
-                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.8103&longitude=90.4125&current_weather=true');
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.8103&longitude=90.4125&current_weather=true', { signal: controller.signal });
                 if (!response.ok) throw new Error('Weather request failed');
                 const data = await response.json();
                 const weather = data.current_weather;
@@ -921,6 +1058,9 @@
                 $('homeWeather').textContent = `${Math.round(weather.temperature)}°C, ${condition}`;
             } catch (error) {
                 $('homeWeather').textContent = 'Weather unavailable';
+            } finally {
+                clearTimeout(timeoutId);
+                $('homeWeather').classList.remove('weather-loading');
             }
         }
 
@@ -942,6 +1082,7 @@
             activeSectionId = dbData[0]?.id || null;
             renderAll();
             setHomeGreeting(false);
+            hideMainLoader();
 
             // Connect to Firebase after the page is already usable.
             try {
