@@ -160,8 +160,10 @@
             font-weight: 500;
             line-height: 1.4;
             cursor: pointer;
-            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            /* Keep category controls physically still; animate only their color state. */
+            transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
             border: 1px solid var(--card-border);
+            transform: none;
         }
         .nav-icon {
             flex: 0 0 20px;
@@ -178,13 +180,30 @@
             background: rgba(255, 255, 255, 0.10);
             color: var(--text);
             border-color: rgba(255,255,255,0.18);
-            transform: translateX(2px);
+            transform: none;
         }
         .nav-link.active {
             background: var(--primary);
             color: #ffffff;
             box-shadow: 0 4px 15px var(--primary-glow);
             border-color: var(--primary);
+            transform: none;
+        }
+        /* Touch devices can keep :hover stuck after a tap. Avoid a second visual state. */
+        @media (hover: none), (pointer: coarse) {
+            .nav-link:hover:not(.active) {
+                background: rgba(128, 128, 128, 0.08);
+                color: var(--text-muted);
+                border-color: var(--card-border);
+                box-shadow: none;
+                transform: none;
+            }
+            .nav-link:active, .nav-link.active:hover { transform: none; }
+            .nav-link.active:hover {
+                background: var(--primary);
+                color: #ffffff;
+                border-color: var(--primary);
+            }
         }
         .edit-mode-btn {
             flex: 0 0 auto;
@@ -275,13 +294,31 @@
         .btn-save:hover { filter: brightness(1.15); transform: translateY(-2px); }
         @media (max-width: 768px) {
             #dashboardView { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--card-border); }
+            .sidebar {
+                width: 100%; height: auto; position: relative;
+                padding: 12px; border-right: none; border-bottom: 1px solid var(--card-border);
+            }
+            /* Two-column category grid shortens the mobile menu so selected content is visible sooner. */
+            #dynamicSidebar {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 7px;
+            }
+            .nav-link {
+                min-height: 40px; padding: 8px 9px; gap: 8px;
+                border-radius: 10px; font-size: 12px; line-height: 1.3;
+            }
+            .nav-icon { flex-basis: 18px; width: 18px; height: 18px; font-size: 15px; }
             .main { margin-left: 0; width: 100%; padding: 15px; }
             .home-greeting { font-size: 24px; }
             .home-menu-grid { max-width: 520px; gap: 12px; }
             .home-menu-card { flex: 1 1 145px; max-width: 190px; min-height: 112px; }
             .home-widgets { flex-direction: column; align-items: center; border-radius: 20px; gap: 8px; }
             .home-widget-divider { display: none; }
+        }
+        @media (max-width: 360px) {
+            .nav-link { font-size: 11px; padding-inline: 7px; gap: 6px; }
+            .nav-icon { flex-basis: 16px; width: 16px; height: 16px; }
         }
 
         /* Logo-free startup loader: shown only while the local interface is prepared. */
@@ -387,14 +424,14 @@
 
     <div class="modal" id="editModal" aria-hidden="true">
         <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-            <h2 id="modalTitle">Add New Link</h2>
+            <h2 id="modalTitle">Add Link</h2>
             <form id="linkForm">
                 <input type="hidden" id="editId">
                 <input type="hidden" id="editSectionId">
                 <div class="input-group"><label for="linkTitle">Title</label><input type="text" id="linkTitle" maxlength="100" required></div>
                 <div class="input-group"><label for="linkUrl">URL</label><input type="url" id="linkUrl" maxlength="2048" placeholder="https://example.com" required></div>
                 <div class="input-group"><label for="linkDesc">Description</label><input type="text" id="linkDesc" maxlength="250" required></div>
-                <div class="input-group"><label for="linkIcon">Icon / Image URL</label><input type="text" id="linkIcon" maxlength="2048" required><span class="help-text">💡 ইমোজি অথবা HTTPS image URL দিন।</span></div>
+                <div class="input-group"><label for="linkIcon">Icon / Image URL</label><input type="text" id="linkIcon" maxlength="2048" required><span class="help-text">💡 Enter an emoji or an HTTPS image URL.</span></div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-cancel" data-action="close-modal" data-modal="editModal">Cancel</button>
                     <button type="submit" class="btn btn-save">Save Link</button>
@@ -405,11 +442,11 @@
 
     <div class="modal" id="sectionModal" aria-hidden="true">
         <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="sectionModalTitle">
-            <h2 id="sectionModalTitle">Add New Menu</h2>
+            <h2 id="sectionModalTitle">Add Menu</h2>
             <form id="sectionForm">
                 <input type="hidden" id="editSecId">
                 <div class="input-group"><label for="sectionTitle">Menu Title</label><input type="text" id="sectionTitle" maxlength="100" required></div>
-                <div class="input-group"><label for="sectionIcon">Menu Icon / Image URL</label><input type="text" id="sectionIcon" maxlength="2048" required><span class="help-text">💡 ইমোজি অথবা HTTPS image URL দিন।</span></div>
+                <div class="input-group"><label for="sectionIcon">Menu Icon / Image URL</label><input type="text" id="sectionIcon" maxlength="2048" required><span class="help-text">💡 Enter an emoji or an HTTPS image URL.</span></div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-cancel" data-action="close-modal" data-modal="sectionModal">Cancel</button>
                     <button type="submit" class="btn btn-save">Save Menu</button>
@@ -584,6 +621,7 @@
                 const item = document.createElement('button');
                 item.type = 'button';
                 item.className = 'nav-link' + (section.id === activeSectionId ? ' active' : '');
+                if (section.id === activeSectionId) item.setAttribute('aria-current', 'page');
                 item.id = 'nav-' + section.id;
                 item.dataset.action = 'switch-section';
                 item.dataset.sectionId = section.id;
@@ -736,8 +774,20 @@
         function switchTab(sectionId) {
             if (!dbData.some(section => section.id === sectionId)) return;
             activeSectionId = sectionId;
-            renderSidebar();
-            renderContent();
+
+            // Update the selected state in place instead of destroying/rebuilding every menu button.
+            // This prevents tap/hover flicker and keeps keyboard/touch focus stable.
+            document.querySelectorAll('#dynamicSidebar .nav-link[data-action="switch-section"]').forEach(item => {
+                const isActive = item.dataset.sectionId === sectionId;
+                item.classList.toggle('active', isActive);
+                if (isActive) item.setAttribute('aria-current', 'page');
+                else item.removeAttribute('aria-current');
+            });
+
+            // Only toggle visibility of the already-rendered category content.
+            document.querySelectorAll('#content-container .section').forEach(section => {
+                section.classList.toggle('active-section', section.id === 'sec-' + sectionId);
+            });
         }
 
         async function saveData(options = {}) {
@@ -795,7 +845,8 @@
             $('linkForm').reset();
             $('editId').value = '';
             $('editSectionId').value = sectionId;
-            $('modalTitle').textContent = 'Add New Link';
+            $('modalTitle').textContent = 'Add Link';
+            $('linkForm').querySelector('button[type="submit"]').textContent = 'Save Link';
             openModal('editModal');
         }
 
@@ -809,14 +860,16 @@
             $('linkUrl').value = link.url;
             $('linkDesc').value = link.desc;
             $('linkIcon').value = link.icon;
-            $('modalTitle').textContent = 'Edit Link';
+            $('modalTitle').textContent = 'Edit';
+            $('linkForm').querySelector('button[type="submit"]').textContent = 'Save Edit';
             openModal('editModal');
         }
 
         function openSectionModal() {
             $('sectionForm').reset();
             $('editSecId').value = '';
-            $('sectionModalTitle').textContent = 'Add New Menu';
+            $('sectionModalTitle').textContent = 'Add Menu';
+            $('sectionForm').querySelector('button[type="submit"]').textContent = 'Save Menu';
             openModal('sectionModal');
         }
 
@@ -826,7 +879,8 @@
             $('editSecId').value = section.id;
             $('sectionTitle').value = section.title;
             $('sectionIcon').value = section.icon;
-            $('sectionModalTitle').textContent = 'Edit Menu';
+            $('sectionModalTitle').textContent = 'Edit';
+            $('sectionForm').querySelector('button[type="submit"]').textContent = 'Save Edit';
             openModal('sectionModal');
         }
 
@@ -992,7 +1046,7 @@
                     case 'edit-section': openEditSectionModal(sectionId); break;
                     case 'close-modal': closeModal(modal); break;
                     case 'delete-link': {
-                        if (!confirm('⚠️ এই link-টি delete করতে চান?')) break;
+                        if (!confirm('⚠️ Are you sure you want to delete this link?')) break;
                         const section = dbData.find(item => item.id === sectionId);
                         if (!section) break;
                         section.links = section.links.filter(item => item.id !== linkId);
@@ -1004,10 +1058,10 @@
                         const section = dbData.find(item => item.id === sectionId);
                         if (!section) break;
                         if (section.links.length > 0) {
-                            alert('🛑 আগে এই মেনুর ভেতরের অপশনগুলো ডিলিট করুন।');
+                            alert('🛑 Delete all links in this menu before deleting the menu.');
                             break;
                         }
-                        if (!confirm(`⚠️ মেনু "${section.title}" ডিলিট করতে চান?`)) break;
+                        if (!confirm(`⚠️ Are you sure you want to delete the menu "${section.title}"?`)) break;
                         dbData = dbData.filter(item => item.id !== sectionId);
                         activeSectionId = dbData[0]?.id || null;
                         renderAll();
@@ -1021,7 +1075,7 @@
             const invalidLink = event.target.closest('a[data-invalid-url="true"]');
             if (invalidLink) {
                 event.preventDefault();
-                showStatus('এই link-এর URL সঠিক নয়। Edit Mode থেকে ঠিক করুন।');
+                showStatus('This link URL is invalid. Please correct it in Edit Mode.');
             }
         });
 
